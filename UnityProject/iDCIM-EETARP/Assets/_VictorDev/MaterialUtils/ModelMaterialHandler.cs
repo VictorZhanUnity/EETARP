@@ -49,6 +49,11 @@ namespace VictorDev.MaterialUtils
                 exlcudeTargets);
         }
 
+        public void ReplaceAll()
+        {
+            ReplaceMaterialRecursively(Instance.targetTransform, replaceMaterial, new HashSet<Transform>());
+        }
+
         public static void ReplaceMaterial(HashSet<Transform> targets = null)
         {
             RestoreOriginalMaterials();

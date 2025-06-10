@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NaughtyAttributes;
+using UnityEditor;
 using UnityEngine;
 using VictorDev.Common;
 using VictorDev.MaterialUtils;
@@ -12,13 +13,16 @@ namespace VictorDev.ObjectUtils
     public class ModelFinder:MonoBehaviour
     {
         [Button]
-        public void FindTargetObjects() => findModels = ModelMaterialHandler.FindTargetObjects(objKeyWords);
+        public void FindTargetObjects() => findedModels = ModelMaterialHandler.FindTargetObjects(objKeyWords);
 
         [Button]
-        public void AddColliderToObjects() => ObjectHelper.AddColliderToObjects(findModels, new BoxCollider());
+        public void AddColliderToObjects() => ObjectHelper.AddColliderToObjects(findedModels, new BoxCollider());
 
         [Button]
-        public void RemoveColliderFromObjects() => ObjectHelper.RemoveColliderFromObjects(findModels);
+        public void RemoveColliderFromObjects() => ObjectHelper.RemoveColliderFromObjects(findedModels);
+        
+        [Button]
+        public void SelectObjects() => Selection.objects = findedModels.Select(t=>t.gameObject).ToArray();
 
         public bool IsOn
         {
@@ -29,7 +33,8 @@ namespace VictorDev.ObjectUtils
             }
         }
         
-        public void ToShow() => ModelMaterialHandler.ReplaceMaterialWithExclude(findModels.ToHashSet());
+        public void ToShow(bool isRestoreMaterial=true) => ModelMaterialHandler.ReplaceMaterialWithExclude(FindedModels, null);
+
         public void ToHide() => ModelMaterialHandler.RestoreOriginalMaterials();
         
         #region Variables
@@ -37,10 +42,13 @@ namespace VictorDev.ObjectUtils
         [SerializeField] List<string> objKeyWords;
         
         [Header(">>> 搜尋到的模型")]
-        [SerializeField] List<Transform> findModels;
+        [SerializeField] List<Transform> findedModels;
         
         /// 搜尋到的模型
-        public List<Transform> FindModels => findModels;
+        public HashSet<Transform> FindedModels => _findedModelsHashSet ??= findedModels.ToHashSet();
+
+        private HashSet<Transform> _findedModelsHashSet;
+
         #endregion
     }
 }
