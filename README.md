@@ -1,2 +1,2 @@
-# iDCIM_Foxconn
-鴻騰精密科技 - 智慧機房
+新加坡 EETARP
+https://www.eetarp.com/
