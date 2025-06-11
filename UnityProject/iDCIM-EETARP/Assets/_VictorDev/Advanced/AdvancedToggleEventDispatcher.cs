@@ -1,43 +1,47 @@
+using System;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace VictorDev.Advanced
 {
-    /// <summary>
     /// 在Inspector裡進階處理Toggle.OnValueChange事件
     /// <para>+ 直接掛在GameObject上即可</para>
-    /// </summary>
-    [RequireComponent(typeof(Toggle))]
     public class AdvancedToggleEventDispatcher : MonoBehaviour
     {
-        [FormerlySerializedAs("isInvokeInAwake")] [Header(">>> Awake時自動Invoke")]
-        public bool isInvokeInStart = true;
-
-        [Header(">>> Toggle值反向Invoke")] public UnityEvent<bool> OnValueToReverse;
-
-        [Header(">>> 當Toggle值為True時")] public UnityEvent<bool> OnValueToTrue;
-        [Header(">>> 當Toggle值為False時")] public UnityEvent<bool> OnValueToFalse;
-        [SerializeField] private Toggle toggle;
-
         private void Awake()
         {
-            toggle.onValueChanged.AddListener(
+            ToggleInstance.onValueChanged.AddListener(
                 (isOn) =>
                 {
-                    if (isOn) OnValueToTrue?.Invoke(isOn);
-                    else OnValueToFalse?.Invoke(isOn);
+                    if (isOn) onValueToTrue?.Invoke(true);
+                    else onValueToFalse?.Invoke(false);
 
-                    OnValueToReverse?.Invoke(!isOn);
+                    onValueToReverse?.Invoke(!isOn);
                 });
         }
 
         private void Start()
         {
-            if (isInvokeInStart) toggle.onValueChanged.Invoke(toggle.isOn);
+            if (isInvokeInStart) ToggleInstance.onValueChanged.Invoke(ToggleInstance.isOn);
         }
 
-        private void OnValidate() => toggle ??= GetComponent<Toggle>();
+        #region Variables
+
+        [Header(">>> Toggle值反向Invoke")] public UnityEvent<bool> onValueToReverse;
+
+        [Foldout("[Event] - On/Off事件個別設定")] [Header(">>> 當Toggle值為True時")]
+        public UnityEvent<bool> onValueToTrue;
+
+        [Foldout("[Event] - On/Off事件個別設定")] [Header(">>> 當Toggle值為False時")]
+        public UnityEvent<bool> onValueToFalse;
+
+        [Foldout(">>> Awake時自動Invoke")] public bool isInvokeInStart = true;
+
+        private Toggle ToggleInstance => _toggle ??= GetComponent<Toggle>();
+        [NonSerialized] private Toggle _toggle;
+
+        #endregion
     }
 }

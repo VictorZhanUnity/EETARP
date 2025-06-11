@@ -30,14 +30,17 @@ namespace VictorDev.Common
             return result;
         }
         
-        /// 刪除目標物件底下所有子物件
-        public static void RemoveAllChildInParent(Transform parent)
+        /// 刪除目標容器下的所有物件
+        public static void DestoryObjectsOfContainer(Transform container)
         {
-            List<GameObject> objectList = parent.Cast<Transform>().Select(obj=>obj.gameObject).ToList();
+            //先複製一份List，進行刪除子物件時才不會影響到Fore迴圈
+            List<Transform> objectList = container.Cast<Transform>().ToList();
             objectList.ForEach(obj=>DestoryObject(obj));
             objectList.Clear();
         }
         
+        /// 刪除目標物件
+        public static void DestoryObject(Transform obj) => DestoryObject(obj.gameObject);
         /// 刪除目標物件
         public static void DestoryObject(GameObject obj)
         {

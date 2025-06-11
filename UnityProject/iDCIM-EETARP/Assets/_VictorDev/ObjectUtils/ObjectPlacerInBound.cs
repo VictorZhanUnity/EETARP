@@ -52,7 +52,7 @@ public class ObjectPlacerInBound : MonoBehaviour
     }
 
     [Button]
-    public void RemoveAllChildren() => ObjectHelper.RemoveAllChildInParent(transform);
+    public void RemoveAllChildren() => ObjectHelper.DestoryObjectsOfContainer(transform);
     
     #region Variables
     

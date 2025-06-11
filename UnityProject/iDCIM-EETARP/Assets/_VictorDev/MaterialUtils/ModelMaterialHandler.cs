@@ -31,7 +31,8 @@ namespace VictorDev.MaterialUtils
         {
             Debug.Log($"FindTargetObjects... \n{string.Join(",", keyWords)}", Instance, EmojiEnum.DataBox);
             return ObjectHelper.FindObjectsByKeywords(Instance.targetTransform, keyWords)
-                .Where(target => target.GetComponent<MeshRenderer>() != null).ToList();
+                .Where(target => target.GetComponent<MeshRenderer>() != null)
+                .OrderBy(target=> target.name).ToList();
         }
 
         /// 根據關鍵字，針對目標物件底下所有子物件進行比對，找出名字包含關鍵字的子物件
