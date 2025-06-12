@@ -16,7 +16,7 @@ namespace VictorDev.DemoUtils
             if (isActivatedInStart) StartJump();
         }
 
-        [Button]
+        [Button] 
         public void StartJump()
         {
             IEnumerator JumpValue()
@@ -26,9 +26,11 @@ namespace VictorDev.DemoUtils
                     float value = Random.Range(minValue, maxValue);
                     float multiplier = Mathf.Pow(10f, afterDotNumber);
 
+                    string dotFormat = (afterDotNumber>0)? "." + new string('#', afterDotNumber) : "";
+                    
                     onValueChangedInt?.Invoke(Mathf.RoundToInt(value));
                     onValueChangedFloat?.Invoke(Mathf.Round(value * multiplier) / multiplier);
-                    onValueChangedString?.Invoke(value.ToString($"F{afterDotNumber}"));
+                    onValueChangedString?.Invoke(value.ToString($"0{dotFormat}"));
                     yield return new WaitForSeconds(intervalSec);
                 }
             }
