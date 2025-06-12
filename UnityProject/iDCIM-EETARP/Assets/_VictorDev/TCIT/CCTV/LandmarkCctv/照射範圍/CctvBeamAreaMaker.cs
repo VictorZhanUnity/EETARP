@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using NaughtyAttributes;
+using UnityEditor;
 using UnityEngine;
 using VictorDev.Common;
 using VictorDev.ObjectUtils;
@@ -20,7 +21,7 @@ namespace VictorDev.TCIT
             {
                 if (cctv.childCount == 0)
                 {
-                    Instantiate(beamAreaPrefab, cctv);
+                    PrefabUtility.InstantiatePrefab(beamAreaPrefab, cctv);
                 }
             });
         }
@@ -37,6 +38,18 @@ namespace VictorDev.TCIT
             });
         }
 
+        [Button]
+        private void BeamAreaOn() => SetBeamArea(true);
+        [Button]
+        private void BeamAreaOff() => SetBeamArea(false);
+        private void SetBeamArea(bool isOn)
+        {
+            modelFinder.FindedModels.ToList().ForEach(cctv =>
+            {
+                cctv.GetChild(0)?.gameObject.SetActive(isOn);
+            });
+        }
+        
         private void Awake() => gameObject.SetActive(false);
     }
 }

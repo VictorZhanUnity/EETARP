@@ -53,6 +53,8 @@ namespace VictorDev.Common
 
         #region Components
         [Header(">>> 目標3D物件")] [SerializeField] Transform target3DObject;
+
+        public Transform Target3DObject => target3DObject;
         
         [Foldout("位置設定")]
         [Header(">>> 位置偏移設定")] 
