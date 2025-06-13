@@ -18,7 +18,7 @@ public class LandmarkMaker : MonoBehaviour
     [Foldout("設定")] [SerializeField] private float visibleRange = 20f;
     private int _counter = 0;
 
-
+    #if UNITY_EDITOR
     [Button]
     private void AddLandmarks()
     {
@@ -38,6 +38,7 @@ public class LandmarkMaker : MonoBehaviour
             if(toggleGroup != null) landmark.toggleGroup = toggleGroup;
         });
     }
+    #endif
 
     [Button]
     private void RemoveLandmarks()

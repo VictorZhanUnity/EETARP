@@ -9,6 +9,7 @@ using VictorDev.Common;
 public class Landmark : MonoBehaviour
 {
     [SerializeField] private string label = "冷通道A-前";
+    public string Label => label;
     [Foldout("[Event] - Toggle點選時Invoke")]
     public UnityEvent<bool> onToggleValueChanged = new();
     
@@ -30,7 +31,12 @@ public class Landmark : MonoBehaviour
     #region Initialized
 
     private void OnEnable() => ToggleInstance.onValueChanged.AddListener(OnToggleValueChangedHandler);
-    private void OnDisable() => ToggleInstance.onValueChanged.RemoveListener(OnToggleValueChangedHandler);
+    private void OnDisable()
+    {
+        ToggleInstance.isOn = false;
+        ToggleInstance.onValueChanged.RemoveListener(OnToggleValueChangedHandler);
+    }
+
     private void OnToggleValueChangedHandler(bool isOn) => onToggleValueChanged?.Invoke(isOn);
 
     private void OnValidate()

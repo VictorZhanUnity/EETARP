@@ -14,6 +14,7 @@ namespace VictorDev.TCIT
         [SerializeField] private GameObject beamAreaPrefab;
         [SerializeField] private ModelFinder modelFinder;
         
+        #if UNITY_EDITOR 
         [Button]
         private void AddBeamAreaToCctvs()
         {
@@ -25,6 +26,7 @@ namespace VictorDev.TCIT
                 }
             });
         }
+        #endif
 
         [Button]
         private void RemoveBeamAreaFromCctvs()
