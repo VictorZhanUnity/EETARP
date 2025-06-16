@@ -59,7 +59,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _Color: {r: 4, g: 0.1254902, b: 0, a: 1}
+    - _Color: {r: 5.9921565, g: 5.9921565, b: 5.9921565, a: 1}
     - _Color_1: {r: 3.031433, g: 3.031433, b: 3.031433, a: 1}
     - _HDR_Color: {r: 2.1185474, g: 2.1185474, b: 2.1185474, a: 1}
   m_BuildTextureStacks: []
