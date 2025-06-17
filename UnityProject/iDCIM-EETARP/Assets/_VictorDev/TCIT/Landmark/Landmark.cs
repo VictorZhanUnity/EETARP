@@ -28,6 +28,8 @@ public class Landmark : MonoBehaviour
         set => ToggleInstance.group = value;
     }
     
+    public bool IsOn{ set=> ToggleInstance.isOn = value;}
+    
     #region Initialized
 
     private void OnEnable() => ToggleInstance.onValueChanged.AddListener(OnToggleValueChangedHandler);
