@@ -7,7 +7,7 @@ namespace VictorDev.MathUtils
     {
         /// [字串]轉換成小數點後N位
         public static string ToDotNumberString(float value, int n = 1) =>
-            value.ToString((n > 0) ? $"0.{new string('#', n)}" : "");
+            value.ToString((n > 0) ? $"0.{new string('#', n)}" : "F0");
 
         /// [float值]轉換成小數點後N位
         public static float ToDotNumberFloat(float value, int n = 1) =>
