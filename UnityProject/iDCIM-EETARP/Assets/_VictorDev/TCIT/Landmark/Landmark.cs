@@ -1,6 +1,6 @@
 using System;
+using NaughtyAttributes;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -9,6 +9,10 @@ using VictorDev.Common;
 public class Landmark : MonoBehaviour
 {
     [SerializeField] private string label = "冷通道A-前";
+    public string Label => label;
+    [Foldout("[Event] - Toggle點選時Invoke")]
+    public UnityEvent<bool> onToggleValueChanged = new();
+    
     public void SetLabel(string value)
     {
         label = value;
@@ -23,13 +27,19 @@ public class Landmark : MonoBehaviour
     {
         set => ToggleInstance.group = value;
     }
-
+    
+    public bool IsOn{ set=> ToggleInstance.isOn = value;}
     
     #region Initialized
 
     private void OnEnable() => ToggleInstance.onValueChanged.AddListener(OnToggleValueChangedHandler);
-    private void OnDisable() => ToggleInstance.onValueChanged.RemoveListener(OnToggleValueChangedHandler);
-    private void OnToggleValueChangedHandler(bool isOn) => OnToggleValueChanged?.Invoke(this, isOn);
+    private void OnDisable()
+    {
+        ToggleInstance.isOn = false;
+        ToggleInstance.onValueChanged.RemoveListener(OnToggleValueChangedHandler);
+    }
+
+    private void OnToggleValueChangedHandler(bool isOn) => onToggleValueChanged?.Invoke(isOn);
 
     private void OnValidate()
     {
@@ -39,8 +49,7 @@ public class Landmark : MonoBehaviour
         TxtLabelSelected.SetText(label);
     }
     #endregion
-
-    [NonSerialized] public readonly UnityEvent<Landmark, bool> OnToggleValueChanged = new();
+    
     
     private Toggle ToggleInstance => _toggle ??= transform.Find("Container").GetComponent<Toggle>();
     [NonSerialized] private Toggle _toggle;

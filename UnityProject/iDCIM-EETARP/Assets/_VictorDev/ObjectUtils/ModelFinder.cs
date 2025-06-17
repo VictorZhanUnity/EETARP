@@ -21,9 +21,11 @@ namespace VictorDev.ObjectUtils
         [Button]
         public void RemoveColliderFromObjects() => ObjectHelper.RemoveColliderFromObjects(findedModels);
         
+        #if UNITY_EDITOR
         [Button]
         public void SelectObjects() => Selection.objects = findedModels.Select(t=>t.gameObject).ToArray();
-
+        #endif
+        
         public bool IsOn
         {
             set
