@@ -1,5 +1,6 @@
 using UnityEngine;
 using VictorDev.Revit;
+using Debug = VictorDev.Common.Debug;
 
 namespace VictorDev.TCIT
 {
@@ -9,7 +10,6 @@ namespace VictorDev.TCIT
 
         public void ReceiveDeviceRevitInfo(DeviceModelDataExtended deviceAssetInfo)
         {
-            Debug.Log($"Click Device: {deviceAssetInfo.devicePath}");
             deviceRevitAssetInfo = deviceAssetInfo;
         }
     }

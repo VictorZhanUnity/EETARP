@@ -8,23 +8,24 @@ using Debug = VictorDev.Common.Debug;
 
 namespace VictorDev.RevitUtils
 {
-    /// <summary>
     /// Revit相關處理
-    /// </summary>
     public abstract class RevitHelper
     {
         public enum EnumRevitModeType
         {
-            Rack, Device
+            Default, Rack, Device
         }
 
-        /// 從模型名稱[] 裡取得deviceId
+        /// 依照模型名稱判斷是什麼類型的模型
         public static EnumRevitModeType CheckRevitModelType(string modelName)
         {
-            EnumRevitModeType result;
-            if(modelName.Contains("DCR", StringComparison.OrdinalIgnoreCase)) result = EnumRevitModeType.Rack;
-            else result = EnumRevitModeType.Device;
-            return result;
+            return modelName switch
+            {
+                string name when name.Contains("DCR", StringComparison.OrdinalIgnoreCase) => EnumRevitModeType.Rack,
+                string name when name.Contains("DCN", StringComparison.OrdinalIgnoreCase) => EnumRevitModeType.Device,
+                string name when name.Contains("DCS", StringComparison.OrdinalIgnoreCase) => EnumRevitModeType.Device,
+                _ => EnumRevitModeType.Default,
+            };
         }
 
         /// 從模型名稱[] 裡取得deviceId

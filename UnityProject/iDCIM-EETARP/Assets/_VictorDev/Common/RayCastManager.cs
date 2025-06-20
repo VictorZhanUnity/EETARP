@@ -9,9 +9,14 @@ namespace VictorDev.Common
 {
     public class RayCastManager : MonoBehaviour
     {
-        [Foldout("[Event] - Invoke RayCast點擊的物件")]
+        [Foldout("[Event Click] - 點擊RayCast經過的物件")]
+        public UnityEvent<GameObject> onClickRaycastHitObject = new();
+        [Foldout("[Event Click] - 點擊RayCast經過的物件")]
+        public UnityEvent<List<GameObject>> onClickRaycastHitObjects = new();
+        
+        [Foldout("[Event] - Invoke RayCast經過的物件")]
         public UnityEvent<GameObject> onRaycastHitObject = new();
-        [Foldout("[Event] - Invoke RayCast射線經過的物件列表")]
+        [Foldout("[Event] - Invoke RayCast經過的物件")]
         public UnityEvent<List<GameObject>> onRaycastHitObjects = new();
         
         /// 從畫面中心發射射線，取得命中物件
@@ -41,14 +46,23 @@ namespace VictorDev.Common
 
         private void Update()
         {
-            if (isActivated && Input.GetMouseButtonDown(0) && EventHelper.IsPointerOverUI()==false)
+            if (isActivated && EventHelper.IsPointerOverUI()==false)
             {
                 List<GameObject> hitObjects = GetRaycastHitObjectsFromScreen(Input.mousePosition);
                 if (hitObjects.Count > 0)
                 {
                     if(isShowDebug) Debug.Log($"onRaycastHitResult: 共{hitObjects.Count}筆", this, EmojiEnum.Target);
-                    onRaycastHitObject?.Invoke(hitObjects.First());
-                    onRaycastHitObjects?.Invoke(hitObjects);
+
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        onClickRaycastHitObject?.Invoke(hitObjects.First());
+                        onClickRaycastHitObjects?.Invoke(hitObjects);
+                    }
+                    else
+                    {
+                        onRaycastHitObject?.Invoke(hitObjects.First());
+                        onRaycastHitObjects?.Invoke(hitObjects);
+                    }
                 }
             }
             DebugDrawLineCheck();

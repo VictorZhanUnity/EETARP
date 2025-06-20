@@ -1,9 +1,10 @@
 using UnityEngine;
 using VictorDev.Revit;
+using Debug = VictorDev.Common.Debug;
 
 namespace VictorDev.TCIT
 {
-    public class HUD_RackRevitnfo : MonoBehaviour
+    public class PanelRackRevitInfo : MonoBehaviour
     {
         public RackModelDataExtended rackRevitAssetInfo;
 

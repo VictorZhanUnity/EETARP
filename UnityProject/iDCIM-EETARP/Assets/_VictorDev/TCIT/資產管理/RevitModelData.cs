@@ -309,9 +309,10 @@ namespace VictorDev.Revit
     // Revit模型System分類列表 (DCR, DCS, DCN)
     public enum EnumReviteModelSystem
     {
-        Dcr,
-        Dcs,
-        Dcn,
+        DCR,
+        DCS,
+        DCN,
+        DCP,
     }
 
     /// Revit模型分類 (RACK, SERVER, ROUTER, SWITCH)
