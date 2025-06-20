@@ -9,6 +9,11 @@ namespace VictorDev.Common
 {
     public class RayCastManager : MonoBehaviour
     {
+        [Foldout("[Event] - Invoke RayCast點擊的物件")]
+        public UnityEvent<GameObject> onRaycastHitObject = new();
+        [Foldout("[Event] - Invoke RayCast射線經過的物件列表")]
+        public UnityEvent<List<GameObject>> onRaycastHitObjects = new();
+        
         /// 從畫面中心發射射線，取得命中物件
         public List<GameObject> GetRaycastHitObjectsFromCenter()
         {
@@ -41,8 +46,9 @@ namespace VictorDev.Common
                 List<GameObject> hitObjects = GetRaycastHitObjectsFromScreen(Input.mousePosition);
                 if (hitObjects.Count > 0)
                 {
-                    Debug.Log($"onRaycastHitResult: 共{hitObjects.Count}筆", this, EmojiEnum.Target);
-                    onRaycastHitResult?.Invoke(hitObjects);
+                    if(isShowDebug) Debug.Log($"onRaycastHitResult: 共{hitObjects.Count}筆", this, EmojiEnum.Target);
+                    onRaycastHitObject?.Invoke(hitObjects.First());
+                    onRaycastHitObjects?.Invoke(hitObjects);
                 }
             }
             DebugDrawLineCheck();
@@ -59,15 +65,15 @@ namespace VictorDev.Common
         }
         
         #region Variables
-        [Header("[Event] - RayCast時Invoke物件列表")]
-        public UnityEvent<List<GameObject>> onRaycastHitResult = new();
-        
         [Foldout("[設定]")] [SerializeField] private float rayDistance = 100f;
         [Foldout("[設定]")] [SerializeField] private LayerMask targetLayerMask = ~0;
         [Foldout("[設定]")] [SerializeField] private bool isActivated = true;
         [Foldout("[設定]")] [SerializeField] private bool isDebugDrawLine = true;
+        [Foldout("[設定]")] [SerializeField] private bool isShowDebug = false;
         private Camera MainCamera => _mainCamera ??= Camera.main;
         [NonSerialized] private Camera _mainCamera;
+        
+        
         #endregion
     }
 }

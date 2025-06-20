@@ -6,7 +6,7 @@ using VictorDev.Common;
 using VictorDev.RevitUtils;
 using Object = UnityEngine.Object;
 
-namespace _VictorDEV.Revit
+namespace VictorDev.Revit
 {
     /// Revit模型資料格式 - 機櫃 (擴增)
     [Serializable]

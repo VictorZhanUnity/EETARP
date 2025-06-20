@@ -22,7 +22,7 @@ namespace VictorDev.FileUtils
         [Button]
         public void LoadJsonFile(string path = "")
         {
-            _jsonData = string.Empty;
+            jsonData = string.Empty;
             if (string.IsNullOrEmpty(filePath)) filePath = path;
             filePath = filePath.Trim();
             Debug.Log("LoadJsonFile...", this, EmojiEnum.Download);
@@ -31,25 +31,27 @@ namespace VictorDev.FileUtils
 
         private void OnSuccessHandler(string data)
         {
-            _jsonData = data;
-            Debug.Log($"LoadJsonFile... OK!\n{data}", this, EmojiEnum.Done);
+            jsonData = data;
+            Debug.Log($"LoadJsonFile... OK!\n{jsonData}", this, EmojiEnum.Done);
             invokeOnSuccess?.Invoke(data);
         }
 
         private void Start()
         {
-            if (isActivatedInStart) LoadJsonFile();
+            if (isReloadOnStart) LoadJsonFile();
+            else if(isInvokeOnStart) invokeOnSuccess?.Invoke(jsonData);
         }
-
+ 
         #region Variables
-
         [Header("[Event] - 成功時Invoke")] public UnityEvent<string> invokeOnSuccess;
 
-        [Foldout("[設定]")] [SerializeField] bool isActivatedInStart = true;
         [Foldout("[設定]")] [SerializeField] string filePath = "jsonfile";
+        [Foldout("[設定]")] [SerializeField] bool isReloadOnStart = false;
+        [Foldout("[設定]")] [SerializeField] bool isInvokeOnStart = true;
 
-        [NonSerialized] private string _jsonData;
-
+        ///序列化，但不顯示在Inspector上
+        [Foldout("[資料項]")]
+        [SerializeField, HideInInspector] private string jsonData;
         #endregion
     }
 }

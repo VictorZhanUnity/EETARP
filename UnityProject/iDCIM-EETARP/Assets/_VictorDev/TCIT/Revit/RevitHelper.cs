@@ -13,6 +13,20 @@ namespace VictorDev.RevitUtils
     /// </summary>
     public abstract class RevitHelper
     {
+        public enum EnumRevitModeType
+        {
+            Rack, Device
+        }
+
+        /// 從模型名稱[] 裡取得deviceId
+        public static EnumRevitModeType CheckRevitModelType(string modelName)
+        {
+            EnumRevitModeType result;
+            if(modelName.Contains("DCR", StringComparison.OrdinalIgnoreCase)) result = EnumRevitModeType.Rack;
+            else result = EnumRevitModeType.Device;
+            return result;
+        }
+
         /// 從模型名稱[] 裡取得deviceId
         public static string GetDevicePath(string modelName)
         {
@@ -25,16 +39,12 @@ namespace VictorDev.RevitUtils
             return "";
         }
 
-        /// <summary>
         /// 從模型上擷取DeviceName
-        /// </summary>
         public static string GetDeviceNameFromModel(string modelName)
             => RevitHelper.GetDevicePath(modelName).Split(":")[1].Trim();
 
 
-        /// <summary>
         /// COBie欄位對照表 (From冠宇 2024.10.25)
-        /// </summary>
         private static Dictionary<string, string> cobieColumnTable { get; set; } = new Dictionary<string, string>()
         {
              {"component_description", "描述/設備名稱" },
@@ -80,9 +90,7 @@ namespace VictorDev.RevitUtils
              {"type_grade", "設備分級" },
              {"type_material", "材質" },
         };
-        /// <summary>
         /// 取得COBie欄位中文名稱
-        /// </summary>
         public static string GetCOBieColumnName_ZH(string key) => cobieColumnTable.Keys.Contains(key) ? cobieColumnTable[key] : null;
 
 
