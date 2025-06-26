@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using VictorDev.Common;
 using VictorDev.RevitUtils;
@@ -127,6 +128,8 @@ namespace VictorDev.Revit
     [Serializable]
     public class CoBieDataExtended : CoBieData
     {
+        public Dictionary<string, string> ToDictionary() => ObjectHelper.GetStringFieldsFromClass(this);
+
         /// COBie欄位對照表 - 中文
         public static Dictionary<string, string> CobieColumnNameZh => _cobieColumnNameZh ??=
             new Dictionary<string, string>()
@@ -204,8 +207,10 @@ namespace VictorDev.Revit
 
         private string[] _devicePathSplit;
 
-        /// 設備樓層
+        /// 設備位於樓層
         public string Floor => DevicePathSplit[3].Trim();
+        /// 設備位於房間
+        public string Room => "Room-" + DevicePathSplit[4].Trim();
 
         /// 設備分類 {DCR, DCN, DCS}
         public EnumReviteModelSystem System => DevicePathSplit[5].Trim().StringToEnum<EnumReviteModelSystem>();
@@ -228,8 +233,8 @@ namespace VictorDev.Revit
             }
         }
 
-        /// 設備種類ICON，由外部呼叫時進行設置，以避免與其它類別建立耦合
-        public Sprite DeviceIcon { get; set; } = null;
+        /// 設備種類ICON
+        public Sprite ModelAssetIcon => RevitConfig.GetModelAssetIcon(DeviceKind);
 
         /// 設備名稱 {Brocade-7X-8-sim+流水號}
         public string DeviceName => devicePath.Split(":")[1].Trim();

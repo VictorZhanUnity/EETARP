@@ -31,13 +31,27 @@ namespace VictorDev.TCIT
         }
 
         /// 接收被點擊的Revit模型
-        public void ReceiveClickedRevitModel(GameObject model) => GetRevitAssetInfo(model);
+        public void ReceiveClickedRevitModel(GameObject model)
+        { 
+            RevitModelDataExtended data = GetRevitAssetInfo(model);
+            if (data != null)
+            {
+                switch (data)
+                {
+                    case RackModelDataExtended rackModelData: 
+                        invokeClickRackRevitInfo?.Invoke(rackModelData);
+                        break;
+                    case DeviceModelDataExtended deviceModelData:
+                        invokeClickDeviceRevitInfo?.Invoke(deviceModelData);
+                        break;
+                }
+            }
+        }
 
         /// 依照模型取得相對應的RevitData
         public RevitModelDataExtended GetRevitAssetInfo(GameObject model)
         {
             string devicePath = RevitHelper.GetDevicePath(model.name);
-
             RevitModelDataExtended result = null;
             switch (RevitHelper.CheckRevitModelType(model.name))
             {
@@ -50,7 +64,6 @@ namespace VictorDev.TCIT
                         rack.devicePath.Equals(devicePath, StringComparison.OrdinalIgnoreCase));
                     break;
             }
-
             return result;
         }
     }

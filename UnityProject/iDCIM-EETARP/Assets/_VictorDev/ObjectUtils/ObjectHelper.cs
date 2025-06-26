@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
@@ -12,6 +13,25 @@ namespace VictorDev.Common
     /// GameObject物件處理
     public static class ObjectHelper
     {
+
+        /// 從類別裡取得string屬性的變數名稱與值
+        public static Dictionary<string, string> GetStringFieldsFromClass<T>(T target) where T : class
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>();
+            // 取得所有 public instance 欄位
+            FieldInfo[] fields = typeof(T).GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            foreach (FieldInfo field in fields)
+            {
+                if (field.FieldType == typeof(string))
+                {
+                    string name = field.Name;
+                    string value = field.GetValue(target) as string;
+                    result[name] = value;
+                }
+            }
+            return result;
+        }
+        
         /// 檢查目標物件是否為Null
         public static bool CheckTargetsIsNull(params object[] targets)
         {
@@ -47,6 +67,22 @@ namespace VictorDev.Common
             if(Application.isPlaying) GameObject.Destroy(obj);
             else GameObject.DestroyImmediate(obj);
         }
+        
+        /// 將子物件前後排序顛倒
+        public static void ReverseChildrenOrder(Transform parent)
+        {
+            List<Transform> children = parent.GetComponentsInChildren<Transform>().ToList();
+            
+            children.ForEach(child=> child.SetAsFirstSibling());
+
+            return;
+            
+            for (int i = 0; i < parent.childCount; i++)
+            {
+                parent.GetChild(parent.childCount - 1).SetSiblingIndex(i);
+            }
+        }
+        
         
         /// ==================================================================================
         
