@@ -5,6 +5,7 @@ using System.Reflection;
 using UnityEngine;
 using VictorDev.Common;
 using VictorDev.RevitUtils;
+using VictorDev.TCIT;
 using Object = UnityEngine.Object;
 
 namespace VictorDev.Revit
@@ -116,7 +117,7 @@ namespace VictorDev.Revit
                 {
                     result = result.Substring(0, lastDashIndex);
                 }
-                return result;
+                return result.Trim();
             }
         }
 

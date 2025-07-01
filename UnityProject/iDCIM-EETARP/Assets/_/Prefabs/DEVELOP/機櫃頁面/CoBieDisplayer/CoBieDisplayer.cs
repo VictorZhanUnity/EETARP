@@ -9,18 +9,26 @@ using VictorDev.Revit;
 namespace VictorDev.TCIT
 {
     /// 顯示COBie資訊
-    public class CoBieDisplayer : MonoBehaviour, RackRevitInfoPage.IRackModelDataExtended
+    public class CoBieDisplayer : MonoBehaviour, RackRevitInfoPage.IRackModelDataExtended, DeviceRevitInfoPage.IDeviceModelDataExtended
     {
-        public void ReceiveRackModelData(RackModelDataExtended data)
+        private RevitModelDataExtended _revitModelData;
+        
+        public void ReceiveRackModelData(RackModelDataExtended rackModelData)
         {
-            _rackModelData = data;
+            _revitModelData = rackModelData;
             UpdateUI();
         }
+        public void ReceiveDeviceModelData(DeviceModelDataExtended deviceModelData)
+        {
+            _revitModelData = deviceModelData;
+            UpdateUI();
+        }
+        
 
         private void UpdateUI()
         {
             ObjectHelper.DestoryObjectsOfContainer(ScrollRectInstance.content);
-            Dictionary<string, string> cobieInfo = _rackModelData.information.ToDictionary();
+            Dictionary<string, string> cobieInfo = _revitModelData.information.ToDictionary();
 
             cobieInfo.ToList().ForEach(keyPair =>
             {
@@ -31,10 +39,8 @@ namespace VictorDev.TCIT
             ScrollRectInstance.verticalNormalizedPosition = 1;
         }
 
-
         #region Variables
  
-        private RackModelDataExtended _rackModelData;
         [SerializeField] private CoBieListItem itemPrefab;
 
         private ScrollRect ScrollRectInstance =>

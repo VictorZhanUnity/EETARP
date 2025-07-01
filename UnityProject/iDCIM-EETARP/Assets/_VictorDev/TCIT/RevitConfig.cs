@@ -5,17 +5,22 @@ using UnityEngine;
 using VictorDev.Common;
 using VictorDev.Revit;
 
-public class RevitConfig: SingletonMonoBehaviour<RevitConfig>
+namespace VictorDev.TCIT
 {
-   [SerializeField] private List<ModelAssetIcons> modelAssetIcons;
-   
-   /// 依設備類別取得ICON
-   public static Sprite GetModelAssetIcon(EnumReviteModelKind deviceKind) => Instance.modelAssetIcons.FirstOrDefault(item => item.system.Equals(deviceKind))?.icon;
+    /// Revit設定管理
+    public class RevitConfig : SingletonMonoBehaviour<RevitConfig>
+    {
+        [SerializeField] private List<ModelAssetIcons> modelAssetIcons;
 
-   [Serializable]
-   public class ModelAssetIcons
-   {
-      public EnumReviteModelKind system;
-      public Sprite icon;
-   }
+        /// 依設備類別取得ICON
+        public static Sprite GetModelAssetIcon(EnumReviteModelKind deviceKind) =>
+            Instance.modelAssetIcons.FirstOrDefault(item => item.system == deviceKind)?.icon;
+
+        [Serializable]
+        public class ModelAssetIcons
+        {
+            public EnumReviteModelKind system;
+            public Sprite icon;
+        }
+    }
 }

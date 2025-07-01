@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using NaughtyAttributes;
 using UnityEngine;
 using VictorDev.Common;
 using VictorDev.Revit;
-using Debug = VictorDev.Common.Debug;
 
 namespace VictorDev.TCIT
 {
@@ -22,6 +20,7 @@ namespace VictorDev.TCIT
         private void InvokeData()
         {
             receiverComps.Cast<IRackModelDataExtended>().ToList().ForEach(receiver=> receiver.ReceiveRackModelData(rackRevitAssetData));
+            gameObject.SetActive(true);
         }
 
         private void OnValidate() => receiverComps = ObjectHelper.CheckTypoOfList<IRackModelDataExtended>(receiverComps);
@@ -39,13 +38,7 @@ namespace VictorDev.TCIT
         {
             void ReceiveRackModelData(RackModelDataExtended rackModelData);
         }
-        
-        public interface IDeviceModelDataExtended
-        {
-            void ReceiveDeviceModelData(DeviceModelDataExtended deviceModelData);
-        }
-
-        
+                
         [Space(100)]        
         public RackModelDataExtended rackRevitAssetData;
 

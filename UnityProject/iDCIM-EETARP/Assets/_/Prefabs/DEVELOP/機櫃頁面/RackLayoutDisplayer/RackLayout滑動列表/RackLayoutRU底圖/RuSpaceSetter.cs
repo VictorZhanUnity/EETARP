@@ -17,6 +17,7 @@ namespace VictorDev.TCIT
         {
             ClearListItems();
 
+            #if UNITY_EDITOR
             for (int i = 1; i <= numOfRuSpace; i++)
             {
                 var item = PrefabUtility.InstantiatePrefab(ruSpaceListItem, transform).GameObject();
@@ -24,6 +25,7 @@ namespace VictorDev.TCIT
                 item.transform.Find("TxtIndexBack").GetComponent<TextMeshProUGUI>().SetText(i.ToString());
                 item.name = $"RuSpaceListItem - {i}";
             }
+            #endif
         }
 
         [Button]

@@ -23,6 +23,9 @@ namespace VictorDev.TCIT
         [Foldout("[資料項] - 機櫃與設備列表")] [SerializeField]
         private List<RackModelDataExtended> rackModels;
 
+        private bool _isOn;
+        public void SetSwitchOn(bool value) => _isOn = value;
+
         /// 接收機櫃與設備資訊JsonString
         public void ReceiveRevitAssetJsonData(string jsonString)
         {
@@ -32,7 +35,9 @@ namespace VictorDev.TCIT
 
         /// 接收被點擊的Revit模型
         public void ReceiveClickedRevitModel(GameObject model)
-        { 
+        {
+            if (_isOn == false) return;
+            
             RevitModelDataExtended data = GetRevitAssetInfo(model);
             if (data != null)
             {
@@ -64,7 +69,7 @@ namespace VictorDev.TCIT
                         rack.devicePath.Equals(devicePath, StringComparison.OrdinalIgnoreCase));
                     break;
             }
-            return result;
+            return result; 
         }
     }
 }

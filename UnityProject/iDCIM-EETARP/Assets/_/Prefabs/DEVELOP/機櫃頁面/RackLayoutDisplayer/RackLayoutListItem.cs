@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,10 +8,11 @@ using VictorDev.Revit;
 namespace VictorDev.TCIT
 {
     /// 機櫃設備份佈ListItem
-    public class RackLayoutListItem : MonoBehaviour, RackRevitInfoPage.IDeviceModelDataExtended
+    public class RackLayoutListItem : MonoBehaviour, DeviceRevitInfoPage.IDeviceModelDataExtended
     {
-        [HideInInspector] public UnityEvent<bool, DeviceModelDataExtended, Toggle> onToggleValueChanged = new();
-
+        [HideInInspector] public UnityEvent<DeviceModelDataExtended, Toggle> onToggleValueChanged = new();
+        public DeviceModelDataExtended _deviceModelData;
+        
         public void ReceiveDeviceModelData(DeviceModelDataExtended deviceModelData)
         {
             _deviceModelData = deviceModelData;
@@ -19,52 +21,67 @@ namespace VictorDev.TCIT
 
         private void UpdateUI()
         {
-            TxtLabel.SetText(_deviceModelData.DeviceName.Trim());
-            name = _deviceModelData.DeviceName.Trim();
-            CalculatePositionAndHeight();
+            icon.sprite = _deviceModelData.ModelAssetIcon;
+            TxtDeviceType.SetText(_deviceModelData.DeviceType);
+            name = $"[U{_deviceModelData.rackLocation}][{_deviceModelData.DeviceKind}] - {_deviceModelData.DeviceName} - {_deviceModelData.information.heightU}U";
+            
+            // 設置Rack位置
+            int posY = Mathf.RoundToInt((_deviceModelData.rackLocation - 1) * _originalItemHeight);
+            transform.localPosition = new Vector3(0, posY, 0f);
+            // 設置高度
+            ItemHeight = _deviceModelData.information.heightU * ItemHeight;
         }
-
-        /// 計算於Layout上的位置PosY
-        private void CalculatePositionAndHeight()
-        {
-            int rackLocation = _deviceModelData.rackLocation;
-
-            float startPosY = 1.5f;
-            float eachLevelHeight = 30f;
-
-            RectTransform rectTrans = GetComponent<RectTransform>();
-
-            Vector2 sizeDelta = rectTrans.sizeDelta;
-            sizeDelta.y = _deviceModelData.information.heightU * eachLevelHeight;
-            rectTrans.sizeDelta = sizeDelta;
-
-            rectTrans.localPosition = new Vector3(0, rackLocation * eachLevelHeight + startPosY, 0f);
-        }
-
-        private void OnValueChanged(bool isOn) => onToggleValueChanged?.Invoke(isOn, _deviceModelData, ToggleInstance);
 
         #region Initialize
 
-        private void OnEnable() => ToggleInstance.onValueChanged.AddListener(OnValueChanged);
+        private void OnEnable()
+        { 
+            // 取得Item原始高度
+            if(_originalItemHeight == 0) _originalItemHeight= ItemHeight;
+            ToggleInstance.onValueChanged.AddListener(OnValueChanged);
+        }
+
         private void OnDisable() => ToggleInstance.onValueChanged.RemoveListener(OnValueChanged);
+        private void OnValueChanged(bool isOn) => onToggleValueChanged?.Invoke(_deviceModelData, ToggleInstance);
         private void OnDestroy() => OnDisable();
 
         #endregion
 
         #region Variables
 
-        private DeviceModelDataExtended _deviceModelData;
-
-        public ToggleGroup ToggleGroup
+        public ToggleGroup toggleGroup
         {
             set => ToggleInstance.group = value;
         }
 
         private Toggle ToggleInstance => _toggleInstance ??= GetComponent<Toggle>();
-        private Toggle _toggleInstance;
+        [NonSerialized] private Toggle _toggleInstance;
+        
+        private Image icon => _icon ??= transform.Find("ICON").GetComponent<Image>();
+        [NonSerialized] private Image _icon;
 
-        private TextMeshProUGUI TxtLabel => _txtLabel ??= transform.Find("TxtLabel").GetComponent<TextMeshProUGUI>();
-        private TextMeshProUGUI _txtLabel;
+        private TextMeshProUGUI TxtDeviceType =>
+            _txtDeviceType ??= transform.Find("TxtDeviceType").GetComponent<TextMeshProUGUI>();
+
+        [NonSerialized] private TextMeshProUGUI _txtDeviceType;
+
+
+        /// 原始尺吋高度
+        private int _originalItemHeight;
+        
+        /// 目前尺吋高度
+        private int ItemHeight
+        {
+            get => Mathf.RoundToInt((_rectTransform ??= GetComponent<RectTransform>()).sizeDelta.y);
+            set
+            {
+                Vector2 size = (_rectTransform ??= GetComponent<RectTransform>()).sizeDelta;
+                size.y = value;
+                _rectTransform.sizeDelta = size;
+            }
+        }
+
+        [NonSerialized] private RectTransform _rectTransform;
 
         #endregion
     }

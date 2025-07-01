@@ -20,6 +20,7 @@ namespace VictorDev.FileUtils
             string parentFolder = "Assets", newFolderName = "StreamingAssets";
             string fullPath = Path.Combine(parentFolder, newFolderName);
 
+#if UNITY_EDITOR
             // 檢查是否已存在
             if (!AssetDatabase.IsValidFolder(fullPath))
             {
@@ -27,6 +28,8 @@ namespace VictorDev.FileUtils
                 AssetDatabase.CreateFolder(parentFolder, newFolderName);
                 Debug.Log("資料夾建立成功: " + fullPath);
             }
+#endif
+
         }
 
         /// 讀取JSON
