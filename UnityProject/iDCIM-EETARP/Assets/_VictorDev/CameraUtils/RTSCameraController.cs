@@ -72,7 +72,7 @@ namespace VictorDev.CameraUtils
         void Update()
         {
             if (target == null) return;
-            if (EventHandler.IsUsingInputField) return;
+            if (EventHelper.IsUsingInputField) return;
             
             HandleMovementInput();
             if (!isRotating) HandleEdgeMovement();

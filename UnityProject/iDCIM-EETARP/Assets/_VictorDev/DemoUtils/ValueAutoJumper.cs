@@ -11,9 +11,9 @@ namespace VictorDev.DemoUtils
         public UnityEvent<float> onValueChangedFloat;
         public UnityEvent<string> onValueChangedString;
 
-        private void Start()
+        private void OnEnable()
         {
-            if (isActivatedInStart) StartJump();
+            if (isActivatedInEnabled) StartJump();
         }
 
         [Button] 
@@ -45,7 +45,7 @@ namespace VictorDev.DemoUtils
 
         #region Variables
 
-        [Foldout("[設定]")] [SerializeField] private bool isActivatedInStart = true;
+        [Foldout("[設定]")] [SerializeField] private bool isActivatedInEnabled = true;
 
         [Foldout("[設定]")] [Header("更新時間間隔")] [SerializeField]
         private float intervalSec = 5f;

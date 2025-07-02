@@ -4,6 +4,7 @@ using UnityEngine.Events;
 
 public class ToggleMediator : MonoBehaviour
 {
+    [Foldout("[Event]")]
     public UnityEvent<bool> invokeEvent;
     [Foldout("[Event] On/Off")]
     public UnityEvent invokeIsOn;

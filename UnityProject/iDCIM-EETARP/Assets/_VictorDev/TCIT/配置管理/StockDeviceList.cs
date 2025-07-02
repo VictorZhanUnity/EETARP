@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using VictorDev.Revit;
 using Debug = VictorDev.Common.Debug;
 
 /// 庫存設備列表

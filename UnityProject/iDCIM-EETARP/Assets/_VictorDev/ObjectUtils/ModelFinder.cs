@@ -28,12 +28,15 @@ namespace VictorDev.ObjectUtils
         
         public bool IsOn
         {
+            get => _isOn;
             set
             {
                 if(value) ToShow();
                 else ToHide();
+                _isOn = value;
             }
         }
+        private bool _isOn;
         
         public void ToShow(bool isRestoreMaterial=true) => ModelMaterialHandler.ReplaceMaterialWithExclude(FindedModels, null);
 

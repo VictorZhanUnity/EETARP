@@ -66,7 +66,7 @@ namespace VictorDev.DateTimeUtils
         }
         private void UpdateClock()
         {
-            string symbol = jumper ? ":" : " ";
+            string symbol = jumper ? ":" : ":";
             string format = (is24Hrs) ? $"HH{symbol}mm" : $"tt hh{symbol}mm";
             if (isShowSec) format += $"{symbol}ss";
 
