@@ -217,20 +217,20 @@ namespace VictorDev.Revit
         public EnumReviteModelSystem System => DevicePathSplit[5].Trim().StringToEnum<EnumReviteModelSystem>();
 
         /// 設備種類 (用關鍵字來判斷)
-        public EnumReviteModelKind DeviceKind
+        public EnumRevitModelKind DeviceKind
         {
             get
             {
                 if (devicePath.Contains("DCR", StringComparison.OrdinalIgnoreCase) ||
                     devicePath.Contains("ATEN", StringComparison.OrdinalIgnoreCase))
-                    return EnumReviteModelKind.Rack;
+                    return EnumRevitModelKind.Rack;
                 if (devicePath.Contains("DCS", StringComparison.OrdinalIgnoreCase))
-                    return EnumReviteModelKind.Server;
+                    return EnumRevitModelKind.Server;
                 if (devicePath.Contains("ROUTER", StringComparison.OrdinalIgnoreCase))
-                    return EnumReviteModelKind.Router;
+                    return EnumRevitModelKind.Router;
                 if (devicePath.Contains("SWITCH", StringComparison.OrdinalIgnoreCase))
-                    return EnumReviteModelKind.Switch;
-                return EnumReviteModelKind.Undefined;
+                    return EnumRevitModelKind.Switch;
+                return EnumRevitModelKind.Undefined;
             }
         }
 
@@ -322,7 +322,7 @@ namespace VictorDev.Revit
     }
 
     /// Revit模型分類 (RACK, SERVER, ROUTER, SWITCH)
-    public enum EnumReviteModelKind
+    public enum EnumRevitModelKind
     {
         Undefined,
         Rack,

@@ -21,9 +21,9 @@ namespace VictorDev.TCIT
         private void UpdateUI()
         {
             int totalDevices = _rackModelData.Containers.Count;
-            _numOfServer = _rackModelData.Containers.Count(device => device.DeviceKind == EnumReviteModelKind.Server);
-            _numOfRouter = _rackModelData.Containers.Count(device => device.DeviceKind == EnumReviteModelKind.Router);
-            _numOfSwitch = _rackModelData.Containers.Count(device => device.DeviceKind == EnumReviteModelKind.Switch);
+            _numOfServer = _rackModelData.Containers.Count(device => device.DeviceKind == EnumRevitModelKind.Server);
+            _numOfRouter = _rackModelData.Containers.Count(device => device.DeviceKind == EnumRevitModelKind.Router);
+            _numOfSwitch = _rackModelData.Containers.Count(device => device.DeviceKind == EnumRevitModelKind.Switch);
 
             void ToBlink(TextMeshProUGUI target, string text) => DotweenHelper.ToBlink(target, text, 0.1f, 0.3f, true);
             DotweenHelper.ToBlink(TxtNumberOfDevices, totalDevices.ToString());

@@ -43,7 +43,7 @@ namespace VictorDev.FileUtils
         }
  
         #region Variables
-        [Header("[Event] - 成功時Invoke")] public UnityEvent<string> invokeOnSuccess;
+        [Foldout("[Event] - 成功時Invoke")] public UnityEvent<string> invokeOnSuccess;
 
         [Foldout("[設定]")] [SerializeField] string filePath = "jsonfile";
         [Foldout("[設定]")] [SerializeField] bool isReloadOnStart = false;

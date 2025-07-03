@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
@@ -13,7 +14,20 @@ namespace VictorDev.Common
     /// GameObject物件處理
     public static class ObjectHelper
     {
-
+        /// 依照環境 Runtime/Editor 來實例化對像物件T
+        /// <para>+ 若container為null，則實例化在Scene根節點</para>
+        public static T InstantiatePrefab<T>(T prefab, Transform container=null) where T: MonoBehaviour
+        {
+            T result = null;
+            #if UNITY_EDITOR
+            result = PrefabUtility.InstantiatePrefab(prefab, container).GetComponent<T>();
+            #else 
+            item = Object.Instantiate(prefab, container);
+            #endif
+            return result;
+        }
+        
+        
         /// 從類別裡取得string屬性的變數名稱與值
         public static Dictionary<string, string> GetStringFieldsFromClass<T>(T target) where T : class
         {

@@ -8,7 +8,7 @@ namespace VictorDev.RevitUtils.IDCIM
     public static class DeviceDataMediator
     {
         /// 篩選出{Server、Router、Switch}類的設備資料項
-        public static List<DeviceModelDataExtended> GetDeviceDataOfModelKind(EnumReviteModelKind modelKind,
+        public static List<DeviceModelDataExtended> GetDeviceDataOfModelKind(EnumRevitModelKind modelKind,
             List<RackModelDataExtended> rackDataList)
             => rackDataList.SelectMany(rack => rack.Containers).Where(device => device.DeviceKind.Equals(modelKind))
                 .ToList();

@@ -29,15 +29,15 @@ namespace VictorDev.Advanced
 
         #region Variables
 
-        [Header(">>> Toggle值反向Invoke")] public UnityEvent<bool> onValueToReverse;
+        [Foldout("[Event] - Toggle值反向Invoke")] public UnityEvent<bool> onValueToReverse;
 
-        [Foldout("[Event] - On/Off事件個別設定")] [Header(">>> 當Toggle值為True時")]
+        [Foldout("[Event] - On")] [Header(">>> 當Toggle值為True時")]
         public UnityEvent onValueToTrue;
 
-        [Foldout("[Event] - On/Off事件個別設定")] [Header(">>> 當Toggle值為False時")]
+        [Foldout("[Event] - Off")] [Header(">>> 當Toggle值為False時")]
         public UnityEvent onValueToFalse;
 
-        [Foldout(">>> Awake時自動Invoke")] public bool isInvokeInStart = true;
+        [Foldout(">>> Start時自動Invoke")] public bool isInvokeInStart = true;
 
         private Toggle ToggleInstance => _toggle ??= GetComponent<Toggle>();
         [NonSerialized] private Toggle _toggle;

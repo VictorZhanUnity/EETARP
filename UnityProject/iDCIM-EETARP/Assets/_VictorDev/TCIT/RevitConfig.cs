@@ -13,13 +13,13 @@ namespace VictorDev.TCIT
         [SerializeField] private List<ModelAssetIcons> modelAssetIcons;
 
         /// 依設備類別取得ICON
-        public static Sprite GetModelAssetIcon(EnumReviteModelKind deviceKind) =>
+        public static Sprite GetModelAssetIcon(EnumRevitModelKind deviceKind) =>
             Instance.modelAssetIcons.FirstOrDefault(item => item.system == deviceKind)?.icon;
 
         [Serializable]
         public class ModelAssetIcons
         {
-            public EnumReviteModelKind system;
+            public EnumRevitModelKind system;
             public Sprite icon;
         }
     }
