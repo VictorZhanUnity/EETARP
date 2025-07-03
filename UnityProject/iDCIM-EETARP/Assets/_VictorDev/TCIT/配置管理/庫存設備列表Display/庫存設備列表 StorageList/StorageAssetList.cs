@@ -16,6 +16,8 @@ namespace VictorDev.TCIT.StorageAssetUtils
     {
         [Foldout("[Event] - 當項目被選擇時Invoke")]
         public UnityEvent<StorageAssetListItem> onItemSelected;
+        [Foldout("[Event] - 當沒有項目被選擇時Invoke")]
+        public UnityEvent onNonItemSelected;
         
         public void ReciveData(List<RevitModelDataExtended> dataList)
         {
@@ -50,28 +52,32 @@ namespace VictorDev.TCIT.StorageAssetUtils
         private void UpdateUI()
         {
             ObjectHelper.DestoryObjectsOfContainer(ScrollRectInstance.content);
+            _itemList.Clear();
+            
             _filteredRevitModelDataList.ForEach(data =>
             {
                 StorageAssetListItem item = ObjectHelper.InstantiatePrefab(assetListItemPrefab, ScrollRectInstance.content);
                 item.ReceiveData(data);
-                item.onSelected.AddListener(onItemSelected.Invoke);
+                item.onSelected.AddListener(OnItemSelected);
+                _itemList.Add(item);
             });
 
             ScrollRectInstance.verticalNormalizedPosition = 1;
+            onNonItemSelected?.Invoke();
         }
 
-        private void OnDisable()
+        private void OnItemSelected(StorageAssetListItem target)
         {
-            _revitModelDataList?.Clear();
-            defaultToggle.isOn = true;
+            if (_itemList.Any(item => item.IsOn) == false) onNonItemSelected?.Invoke();
+            else if (target.IsOn) onItemSelected?.Invoke(target);
         }
-        
+
         #region Variables
         [Foldout("[設定]")]
         [SerializeField] private StorageAssetListItem assetListItemPrefab;
-        [Foldout("[設定]")]
-        [SerializeField] private Toggle defaultToggle;
         private List<RevitModelDataExtended> _revitModelDataList, _filteredRevitModelDataList;
+
+        [NonSerialized] private List<StorageAssetListItem> _itemList = new ();
         
         private ScrollRect ScrollRectInstance => _scrollRect ??= transform.Find("Panel/Container/ScrollRect滑動列表").GetComponent<ScrollRect>();
         [NonSerialized] private ScrollRect _scrollRect;

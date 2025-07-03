@@ -10,8 +10,10 @@ namespace VictorDev.Advanced
     /// <para>+ 直接掛在GameObject上即可</para>
     public class AdvancedToggleEventDispatcher : MonoBehaviour
     {
-        private void Awake()
+        private void Start()
         {
+            if (isInvokeInStart) ToggleInstance.onValueChanged.Invoke(ToggleInstance.isOn);
+            
             ToggleInstance.onValueChanged.AddListener(
                 (isOn) =>
                 {
@@ -20,11 +22,6 @@ namespace VictorDev.Advanced
 
                     onValueToReverse?.Invoke(!isOn);
                 });
-        }
-
-        private void Start()
-        {
-            if (isInvokeInStart) ToggleInstance.onValueChanged.Invoke(ToggleInstance.isOn);
         }
 
         #region Variables
