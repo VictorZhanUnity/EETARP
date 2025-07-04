@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using VictorDev.Common;
+using Debug = UnityEngine.Debug;
 
 namespace VictorDev.CameraUtils
 {
@@ -8,7 +9,7 @@ namespace VictorDev.CameraUtils
     /// https://chatgpt.com/share/67fcb5ab-b03c-8012-b685-28ab8ee23da5
     public class RTSCameraController : MonoBehaviour
     {
-        [Header(">>> LookAt對像")] public Transform target;
+        [Header(">>> LookAt對像")] [SerializeField] private Transform target;
 
         [Header(">>> 移動邊界BoxCollider Trigger")]
         public BoxCollider boundsCollider;

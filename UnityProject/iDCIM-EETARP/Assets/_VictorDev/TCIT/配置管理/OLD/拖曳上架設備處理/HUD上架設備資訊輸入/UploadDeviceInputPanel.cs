@@ -44,7 +44,7 @@ public class UploadDeviceInputPanel : MonoBehaviour
 
     private void OnUploadDeviceSuccess()
     {
-        List<RackSpaceDisplayer> needToRemove = _rack.AvailableUDisplayer.Where(displayer=> _occupyULevel.Contains(displayer.ULevel)).ToList();
+        List<RackUnitDisplay> needToRemove = _rack.AvailableUDisplayer.Where(displayer=> _occupyULevel.Contains(displayer.ULevel)).ToList();
         needToRemove.ForEach(target=>
         {
             target.IsPinULocationVisible = false;

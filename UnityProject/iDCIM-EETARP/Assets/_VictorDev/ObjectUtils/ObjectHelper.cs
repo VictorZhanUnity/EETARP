@@ -16,17 +16,18 @@ namespace VictorDev.Common
     {
         /// 依照環境 Runtime/Editor 來實例化對像物件T
         /// <para>+ 若container為null，則實例化在Scene根節點</para>
-        public static T InstantiatePrefab<T>(T prefab, Transform container=null) where T: MonoBehaviour
+        public static T Instantiate<T>(T prefab, Transform container=null) where T: Component
         {
             T result = null;
             #if UNITY_EDITOR
+            // Editor 模式使用 PrefabUtility
             result = PrefabUtility.InstantiatePrefab(prefab, container).GetComponent<T>();
             #else 
-            item = Object.Instantiate(prefab, container);
+            // 運行時使用 Unity 的 Instantiate
+            result = Object.Instantiate(prefab, container);
             #endif
             return result;
         }
-        
         
         /// 從類別裡取得string屬性的變數名稱與值
         public static Dictionary<string, string> GetStringFieldsFromClass<T>(T target) where T : class

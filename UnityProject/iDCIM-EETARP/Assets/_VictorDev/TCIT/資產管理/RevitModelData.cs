@@ -18,7 +18,7 @@ namespace VictorDev.Revit
         public string DeviceType =>DevicePathSplit.Length > 6? DevicePathSplit[6].Split(":")[0].Trim() : "";
 
         /// 可用U空間物件List {RackSpaceDisplayer}
-        public List<RackSpaceDisplayer> AvailableUDisplayer { get; set; } = new();
+        public List<RackUnitDisplay> AvailableUDisplayer { get; set; } = new();
 
         /// 已使用的U層 (即時計算)
         public List<int> OccupyULevels => Containers
@@ -197,7 +197,8 @@ namespace VictorDev.Revit
         public Transform Model
         {
             get => _model ??= Object.FindObjectsByType<Transform>(FindObjectsSortMode.None).FirstOrDefault(target =>
-                RevitHelper.GetDevicePath(target.name).Contains(devicePath, StringComparison.OrdinalIgnoreCase));
+               // RevitHelper.GetDevicePath(target.name).Contains(devicePath, StringComparison.OrdinalIgnoreCase));
+                RevitHelper.GetDevicePath(target.name) == devicePath);
             set => _model = value;
         }
         [NonSerialized]

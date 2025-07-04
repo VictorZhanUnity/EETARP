@@ -12,6 +12,9 @@ namespace VictorDev.TCIT.StorageAssetUtils
     /// 配置管理 - 設備/庫存 管理器
     public class StorageAssetManager : MonoBehaviour
     {
+        [Foldout("[Event] - Invoke庫存Asset資料(機櫃/設備)")]
+        public UnityEvent<List<RevitModelDataExtended>> invokeStorageAssetData;
+        
         public void ReceiveStorageAssetJsonData(string jsonString) => TempDataHandler(jsonString);
 
         private void TempDataHandler(string jsonString)
@@ -44,11 +47,8 @@ namespace VictorDev.TCIT.StorageAssetUtils
         private void Start() => CombineStorageAssetData();
 
         #region Variables
-
-        [Foldout("[Event] - Invoke庫存Asset資料(機櫃/設備)")]
-        public UnityEvent<List<RevitModelDataExtended>> invokeStorageAssetData;
         private List<RevitModelDataExtended> _revitModels;
-
+        
         [Foldout("[庫存Asset資料項]")] [SerializeField]
         private List<DeviceModelDataExtended> deviceModels;
         [Foldout("[庫存Asset資料項]")] [SerializeField]

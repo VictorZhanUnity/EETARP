@@ -8,18 +8,31 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using VictorDev.Common;
 using VictorDev.Revit;
+using VictorDev.TCIT.StorageAssetUtils;
 
-public class UploadDeviceHandler : MonoBehaviour
+public class UploadDeviceHandler : MonoBehaviour, IRevitModelDataExtended
 {
     [Header("[Event] - 點擊機櫃U層時進行上架Event {庫存設備，目標機櫃，佔用U層數}")]
     public UnityEvent<DeviceModelDataExtended, RackModelDataExtended, List<int>> onUploadDevice = new();
 
-    /// 接收目前所選擇的庫存設備
+    /// 接收目前所選擇的庫存設備 
     public void ReceiveSelectedStockDevice(DeviceModelDataExtended stockDevice)
     {
         CancelUploadDevice();
         _selectedStockDevice = stockDevice;
         InitialDragDevice();
+    }
+    
+    public void ReceiveData(RevitModelDataExtended revitModelDataExtended)
+    {
+        ReviteModelData = revitModelDataExtended;
+        if (ReviteModelData is DeviceModelDataExtended deviceModelDataExtended)
+        {
+            CancelUploadDevice();
+            DeviceModelDataInfo = deviceModelDataExtended;
+            _selectedStockDevice = DeviceModelDataInfo;
+            InitialDragDevice();
+        }
     }
 
     /// 建立欲上架的設備模型
@@ -100,7 +113,7 @@ public class UploadDeviceHandler : MonoBehaviour
 
 
             // 有MouseOver在RackSpacer上
-            if (hit.transform.TryGetComponent(out RackSpaceDisplayer targetRackSpacer))
+            if (hit.transform.TryGetComponent(out RackUnitDisplay targetRackSpacer))
             {
                 //若RackeDisplayer與之前的不一樣時
                 if (_currentMouseOverRackSpacer != null && _currentMouseOverRackSpacer != targetRackSpacer)
@@ -163,8 +176,12 @@ public class UploadDeviceHandler : MonoBehaviour
 
     #region Variables
     
+    public RevitModelDataExtended ReviteModelData { get; private set; }
+    public RackModelDataExtended RackModelDataInfo { get;  private set;}
+    public DeviceModelDataExtended DeviceModelDataInfo { get;  private set;}
+    
     /// 目前庫存設備所佔用的RackSpacerDisplayer
-    private List<RackSpaceDisplayer> CurrentOccupyRackSpaceDisplayers
+    private List<RackUnitDisplay> CurrentOccupyRackSpaceDisplayers
     {
         get
         {
@@ -179,10 +196,10 @@ public class UploadDeviceHandler : MonoBehaviour
 
     private bool _isPutInRackSpacer = false;
     [NonSerialized]
-    private RackSpaceDisplayer _currentMouseOverRackSpacer;
+    private RackUnitDisplay _currentMouseOverRackSpacer;
 
-    [Header("[設定] - 機櫃空間的LayerMask")] [SerializeField]
-    private LayerMask placeToRackSpacerLayerMask;
+    /*[Header("[設定] - 機櫃空間的LayerMask")] [SerializeField]
+    private LayerMask placeToRackSpacerLayerMask;*/
 
     [Header("[設定] - 上架設備的LayerMask")] [SerializeField]
     private LayerMask uploadDeviceLayerMask;
@@ -206,4 +223,7 @@ public class UploadDeviceHandler : MonoBehaviour
     private Camera _mainCamera;
 
     #endregion
+
+   
+   
 }

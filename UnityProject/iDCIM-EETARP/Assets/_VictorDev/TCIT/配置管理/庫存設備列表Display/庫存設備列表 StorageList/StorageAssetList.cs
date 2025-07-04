@@ -15,7 +15,7 @@ namespace VictorDev.TCIT.StorageAssetUtils
     public class StorageAssetList : MonoBehaviour
     {
         [Foldout("[Event] - 當項目被選擇時Invoke")]
-        public UnityEvent<StorageAssetListItem> onItemSelected;
+        public UnityEvent<RevitModelDataExtended> onItemSelected;
         [Foldout("[Event] - 當沒有項目被選擇時Invoke")]
         public UnityEvent onNonItemSelected;
         
@@ -56,7 +56,7 @@ namespace VictorDev.TCIT.StorageAssetUtils
             
             _filteredRevitModelDataList.ForEach(data =>
             {
-                StorageAssetListItem item = ObjectHelper.InstantiatePrefab(assetListItemPrefab, ScrollRectInstance.content);
+                StorageAssetListItem item = ObjectHelper.Instantiate(assetListItemPrefab, ScrollRectInstance.content);
                 item.ReceiveData(data);
                 item.onSelected.AddListener(OnItemSelected);
                 _itemList.Add(item);
@@ -69,7 +69,7 @@ namespace VictorDev.TCIT.StorageAssetUtils
         private void OnItemSelected(StorageAssetListItem target)
         {
             if (_itemList.Any(item => item.IsOn) == false) onNonItemSelected?.Invoke();
-            else if (target.IsOn) onItemSelected?.Invoke(target);
+            else if (target.IsOn) onItemSelected?.Invoke(target.ReviteModelData);
         }
 
         #region Variables
@@ -87,8 +87,6 @@ namespace VictorDev.TCIT.StorageAssetUtils
     /// For ListItem
     public interface IRevitModelDataExtended
     {
-        public bool IsOn { get; set; }
-
         public RevitModelDataExtended ReviteModelData { get; }
         [CanBeNull] public RackModelDataExtended RackModelDataInfo { get; }
         [CanBeNull] public DeviceModelDataExtended DeviceModelDataInfo { get; }
