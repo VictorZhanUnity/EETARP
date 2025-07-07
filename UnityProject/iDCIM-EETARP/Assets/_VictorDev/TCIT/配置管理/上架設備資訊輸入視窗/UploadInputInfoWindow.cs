@@ -5,7 +5,11 @@ using NaughtyAttributes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
+using VictorDev.Common;
 using VictorDev.Revit;
+using Debug = UnityEngine.Debug;
+using Object = System.Object;
 
 namespace VictorDev.TCIT.StorageAssetUtils
 {
@@ -17,6 +21,8 @@ namespace VictorDev.TCIT.StorageAssetUtils
 
         public void ReceiveData(DeviceModelDataExtended device, RackModelDataExtended rack, List<int> rackUnits)
         {
+            Debug.Log($"ReceiveData: {device} / {rack} / {rackUnits}");
+            
             _uploadDevice = device;
             _toRack = rack;
             _occupyRackUnits = rackUnits;
@@ -26,7 +32,8 @@ namespace VictorDev.TCIT.StorageAssetUtils
 
         private void UpdateUI()
         {
-            TxtOccupyRackUnits.SetText($"U{_occupyRackUnits.Min()} ~ U{_occupyRackUnits.Max()}");
+            icon.sprite = _uploadDevice.ModelAssetIcon;
+            TxtOccupyRackUnits.SetText($"U{_occupyRackUnits.Min()}-U{_occupyRackUnits.Max()}");
             TxtDeviceType.SetText(_uploadDevice.DeviceType);
             TxtWatt.SetText(_uploadDevice.information.watt.ToString());
             TxtWeight.SetText(_uploadDevice.information.weight.ToString());
@@ -44,8 +51,11 @@ namespace VictorDev.TCIT.StorageAssetUtils
         private void OnUploadDeviceSuccess()
         {
             List<RackUnitDisplay> needToRemove = _toRack.AvailableUDisplayer.Where(rackUnitFree=> _occupyRackUnits.Contains(rackUnitFree.ULevel)).ToList();
+            
             needToRemove.ForEach(target=>
             {
+                Debug.Log($"RackUnitDisplay needToRemove: {target.ULevel}");
+
                 target.IsPinULocationVisible = false;
                 target.HideULevel();
             });
@@ -73,20 +83,22 @@ namespace VictorDev.TCIT.StorageAssetUtils
         [NonSerialized] private DeviceModelDataExtended _uploadDevice;
         [NonSerialized] private RackModelDataExtended _toRack;
         [NonSerialized] private List<int> _occupyRackUnits;
-
         
-        
-        private TMP_InputField InputDeviceName => _inputDeviceName ??= GetComponent<TMP_InputField>();
-        private TMP_InputField InputIpAddress => _inputIpAddress ??= GetComponent<TMP_InputField>();
-        private TMP_InputField InputNote => _inputNote ??= GetComponent<TMP_InputField>();
+        private TMP_InputField InputDeviceName => _inputDeviceName ??= transform.Find("Panel/Container/DeviceName/InputDeviceName").GetComponent<TMP_InputField>();
+        private TMP_InputField InputIpAddress => _inputIpAddress ??= transform.Find("Panel/Container/IpAddress/InputIpAddress").GetComponent<TMP_InputField>();
+        private TMP_InputField InputNote => _inputNote ??= transform.Find("Panel/Container/Note/InputNote").GetComponent<TMP_InputField>();
         [NonSerialized] private TMP_InputField _inputDeviceName, _inputIpAddress, _inputNote;
         
-        private TextMeshProUGUI TxtDeviceType => _txtDeviceType ??= GetComponent<TextMeshProUGUI>();
-        private TextMeshProUGUI TxtWatt => _txtWatt ??= GetComponent<TextMeshProUGUI>();
-        private TextMeshProUGUI TxtWeight => _txtWeight ??= GetComponent<TextMeshProUGUI>();
-        private TextMeshProUGUI TxtRackUnit => _txtRackUnit ??= GetComponent<TextMeshProUGUI>();
-        private TextMeshProUGUI TxtOccupyRackUnits => _txtOccupyRackUnits ??= GetComponent<TextMeshProUGUI>();
+        private TextMeshProUGUI TxtDeviceType => _txtDeviceType ??= transform.Find("Panel/Container/DeviceInfo/TxtDeviceType").GetComponent<TextMeshProUGUI>();
+        private TextMeshProUGUI TxtWatt => _txtWatt ??= transform.Find("Panel/Container/DeviceInfo/TxtWatt").GetComponent<TextMeshProUGUI>();
+        private TextMeshProUGUI TxtWeight => _txtWeight ??= transform.Find("Panel/Container/DeviceInfo/TxtWeight").GetComponent<TextMeshProUGUI>();
+        private TextMeshProUGUI TxtRackUnit => _txtRackUnit ??= transform.Find("Panel/Container/DeviceInfo/TxtRackUnit").GetComponent<TextMeshProUGUI>();
+        private TextMeshProUGUI TxtOccupyRackUnits => _txtOccupyRackUnits ??= transform.Find("Panel/Container/DeviceInfo/TxtOccupyRackUnits").GetComponent<TextMeshProUGUI>();
         [NonSerialized] private TextMeshProUGUI _txtDeviceType, _txtWatt, _txtWeight, _txtRackUnit, _txtOccupyRackUnits;
+        
+        private Image icon => _icon ??= transform.Find("Panel/Container/DeviceInfo/ICON/ICON").GetComponent<Image>();
+        [NonSerialized] private Image _icon;
+
         #endregion
     }
 }

@@ -70,6 +70,14 @@ namespace VictorDev.TCIT.StorageAssetUtils
         {
             if (_itemList.Any(item => item.IsOn) == false) onNonItemSelected?.Invoke();
             else if (target.IsOn) onItemSelected?.Invoke(target.ReviteModelData);
+
+            _currentSelectedItem = target;
+        }
+
+        public void CancelItemSelected()
+        {
+            _currentSelectedItem.IsOn = false;
+            _currentSelectedItem = null;
         }
 
         #region Variables
@@ -78,6 +86,8 @@ namespace VictorDev.TCIT.StorageAssetUtils
         private List<RevitModelDataExtended> _revitModelDataList, _filteredRevitModelDataList;
 
         [NonSerialized] private List<StorageAssetListItem> _itemList = new ();
+        
+        private StorageAssetListItem _currentSelectedItem;
         
         private ScrollRect ScrollRectInstance => _scrollRect ??= transform.Find("Panel/Container/ScrollRect滑動列表").GetComponent<ScrollRect>();
         [NonSerialized] private ScrollRect _scrollRect;

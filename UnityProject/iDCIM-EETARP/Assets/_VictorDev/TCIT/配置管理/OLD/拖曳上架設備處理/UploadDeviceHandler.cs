@@ -9,6 +9,7 @@ using UnityEngine.InputSystem;
 using VictorDev.Common;
 using VictorDev.Revit;
 using VictorDev.TCIT.StorageAssetUtils;
+using Debug = UnityEngine.Debug;
 
 public class UploadDeviceHandler : MonoBehaviour, IRevitModelDataExtended
 {
@@ -126,6 +127,9 @@ public class UploadDeviceHandler : MonoBehaviour, IRevitModelDataExtended
                 //找出合適上架庫存設備高度U的ULevel
                 int suitableStartULevelULevel = targetRackSpacer.RackData
                     .GetSuitableStartULevel(_selectedStockDevice, targetRackSpacer.ULevel);
+                
+                Debug.Log($"suitableStartULevelULevel: {suitableStartULevelULevel}");
+                
                 targetRackSpacer = targetRackSpacer.RackData.AvailableUDisplayer
                     .FirstOrDefault(displayer => displayer.ULevel.Equals(suitableStartULevelULevel));
                 if (targetRackSpacer != null)
@@ -137,13 +141,15 @@ public class UploadDeviceHandler : MonoBehaviour, IRevitModelDataExtended
                     parentTransform = targetRackSpacer.transform;
                     matColor = new Color(0, 1, 0, 10 / 255f);
                     Vector3 rackSpacerSize = targetRackSpacer.GetComponent<MeshFilter>().mesh.bounds.size;
-                    // rackSpacerSize.y = 0;
-                    //localPosition = Vector3.zero - rackSpacerSize * 0.5f + uploadDevicePosOffset;
+                    
+                    rackSpacerSize.y = 0;
+                    localPosition = Vector3.zero - rackSpacerSize * 0.5f + uploadDevicePosOffset;
                     
                     //當設備Pivot在中心點
-                    Vector3 diffSize = size - rackSpacerSize;
+                    /*Vector3 diffSize = size - rackSpacerSize;
                     diffSize.y = 0;
-                    localPosition = Vector3.zero + diffSize + uploadDevicePosOffset;
+                    localPosition = Vector3.zero + diffSize + uploadDevicePosOffset;*/
+                    
                      _dragUploadDevice.gameObject.SetActive(true);
                 }
             }

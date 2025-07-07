@@ -23,6 +23,7 @@ public class RackUnitDisplay : MonoBehaviour
     public void ShowULevel()
     {
         if (IsPinULocationVisible == false) UIObject.gameObject.SetActive(true);
+        GetComponent<MeshRenderer>().enabled = false;
     }
 
     /// 隱藏U層
@@ -61,7 +62,8 @@ public class RackUnitDisplay : MonoBehaviour
 
     /// 機櫃裡第1U的起始位置
     //private Vector3 StartPos => new Vector3(-0.00172f, 0.0992f, -0.3775994f);
-    private Vector3 StartPos => new Vector3(0.3234f, 0.09915784f, 0.2224f);
+    //private Vector3 StartPos => new Vector3(0.3234f, 0.09915784f, 0.2224f);
+    private Vector3 StartPos => new Vector3(0.3247699f, 0.1026416f, 0.2132586f);
 
     /// 每1U的高度Y
     private float PosYHeight => 0.0444973f;

@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
-using VictorDev.Common;
 using VictorDev.Revit;
 using VictorDev.RevitUtils;
 using Debug = VictorDev.Common.Debug;
@@ -62,6 +61,8 @@ namespace VictorDev.TCIT
                         invokeClickRackRevitInfo?.Invoke(rackModelData);
                         break;
                     case DeviceModelDataExtended deviceModelData:
+                       RackModelDataExtended target = rackAssetModels.FirstOrDefault(rack=> rack.devicePath.Equals(deviceModelData.rackDevicePath, StringComparison.OrdinalIgnoreCase));
+                       deviceModelData.rackModelData ??= target;
                         invokeClickDeviceRevitInfo?.Invoke(deviceModelData);
                         break;
                 }

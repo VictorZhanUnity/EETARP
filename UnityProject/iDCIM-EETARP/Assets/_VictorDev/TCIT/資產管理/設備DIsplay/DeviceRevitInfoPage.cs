@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Events;
 using VictorDev.Common;
 using VictorDev.Revit;
 
@@ -38,5 +39,12 @@ namespace VictorDev.TCIT
             void ReceiveDeviceModelData(DeviceModelDataExtended deviceModelData);
         }
         public DeviceModelDataExtended deviceRevitAssetData;
+
+
+        [Foldout("[Event] - 下架設備")] public UnityEvent<DeviceModelDataExtended> removeDeviceFromRack;
+        public void ShutdownAndRemove()
+        {
+            removeDeviceFromRack?.Invoke(deviceRevitAssetData);
+        }
     }
 }
