@@ -128,8 +128,6 @@ public class UploadDeviceHandler : MonoBehaviour, IRevitModelDataExtended
                 int suitableStartULevelULevel = targetRackSpacer.RackData
                     .GetSuitableStartULevel(_selectedStockDevice, targetRackSpacer.ULevel);
                 
-                Debug.Log($"suitableStartULevelULevel: {suitableStartULevelULevel}");
-                
                 targetRackSpacer = targetRackSpacer.RackData.AvailableUDisplayer
                     .FirstOrDefault(displayer => displayer.ULevel.Equals(suitableStartULevelULevel));
                 if (targetRackSpacer != null)
@@ -158,7 +156,6 @@ public class UploadDeviceHandler : MonoBehaviour, IRevitModelDataExtended
                 _currentMouseOverRackSpacer?.RackData.AvailableUDisplayer.ForEach(
                     displayer => displayer.HideULevel());
                 _currentMouseOverRackSpacer = null;
-                
                 _dragUploadDevice.gameObject.SetActive(false);
             }
 

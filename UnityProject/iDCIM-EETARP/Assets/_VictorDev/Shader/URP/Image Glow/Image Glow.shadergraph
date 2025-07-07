@@ -8,6 +8,9 @@
         },
         {
             "m_Id": "9134eb72b1a04dd7afdc46382b5c378e"
+        },
+        {
+            "m_Id": "3bdc5635ea3247e7be9ddd750f617441"
         }
     ],
     "m_Keywords": [],
@@ -340,6 +343,34 @@
     },
     "m_Property": {
         "m_Id": "9134eb72b1a04dd7afdc46382b5c378e"
+    }
+}
+
+{
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
+    "m_ObjectId": "3bdc5635ea3247e7be9ddd750f617441",
+    "m_Guid": {
+        "m_GuidSerialized": "f5e4ae40-8cd7-4a8d-852f-032beb507b7a"
+    },
+    "m_Name": "Stencil",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "Stencil",
+    "m_DefaultReferenceName": "_Stencil",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": 0.0,
+    "m_FloatType": 0,
+    "m_RangeValues": {
+        "x": 0.0,
+        "y": 1.0
     }
 }
 
@@ -993,13 +1024,13 @@
     "m_RefNameGeneratedByDisplayName": "MainTex",
     "m_DefaultReferenceName": "_MainTex",
     "m_OverrideReferenceName": "",
-    "m_GeneratePropertyBlock": false,
+    "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
     "m_CustomSlotLabel": "",
     "m_DismissedVersion": 0,
     "m_Precision": 0,
-    "overrideHLSLDeclaration": false,
-    "hlslDeclarationOverride": 0,
+    "overrideHLSLDeclaration": true,
+    "hlslDeclarationOverride": 2,
     "m_Hidden": false,
     "m_Value": {
         "m_SerializedTexture": "{\"texture\":{\"fileID\":10300,\"guid\":\"0000000000000000f000000000000000\",\"type\":0}}",
@@ -1096,6 +1127,9 @@
         },
         {
             "m_Id": "9134eb72b1a04dd7afdc46382b5c378e"
+        },
+        {
+            "m_Id": "3bdc5635ea3247e7be9ddd750f617441"
         }
     ]
 }

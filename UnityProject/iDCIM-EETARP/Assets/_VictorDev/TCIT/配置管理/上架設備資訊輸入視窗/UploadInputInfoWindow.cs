@@ -21,8 +21,6 @@ namespace VictorDev.TCIT.StorageAssetUtils
 
         public void ReceiveData(DeviceModelDataExtended device, RackModelDataExtended rack, List<int> rackUnits)
         {
-            Debug.Log($"ReceiveData: {device} / {rack} / {rackUnits}");
-            
             _uploadDevice = device;
             _toRack = rack;
             _occupyRackUnits = rackUnits;

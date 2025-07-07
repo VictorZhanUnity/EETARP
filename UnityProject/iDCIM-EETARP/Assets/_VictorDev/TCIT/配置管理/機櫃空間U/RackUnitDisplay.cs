@@ -23,13 +23,19 @@ public class RackUnitDisplay : MonoBehaviour
     public void ShowULevel()
     {
         if (IsPinULocationVisible == false) UIObject.gameObject.SetActive(true);
-        GetComponent<MeshRenderer>().enabled = false;
     }
 
     /// 隱藏U層
     public void HideULevel()
     {
         if (IsPinULocationVisible == false) UIObject.gameObject.SetActive(false);
+        GetComponent<MeshRenderer>().enabled = false;
+    }
+    
+    public void SetULevelVisible(bool isVisible)
+    {
+        if (IsPinULocationVisible == false) UIObject.gameObject.SetActive(isVisible);
+        if(isVisible) GetComponent<MeshRenderer>().enabled = false;
     }
 
     private void OnMouseExit()
