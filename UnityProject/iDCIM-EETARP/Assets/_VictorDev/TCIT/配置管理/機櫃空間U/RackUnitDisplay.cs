@@ -72,7 +72,7 @@ public class RackUnitDisplay : MonoBehaviour
     private Vector3 StartPos => new Vector3(0.3247699f, 0.1026416f, 0.2132586f);
 
     /// 每1U的高度Y
-    private float PosYHeight => 0.0444973f;
+    private float PosYHeight => 0.5441315f - 0.4996342f;
 
     private Transform UIObject => _uIObject ??= transform.GetChild(0);
     private Transform _uIObject;

@@ -7,6 +7,7 @@ using VictorDev.Revit;
 
 namespace VictorDev.TCIT
 {
+    /// 顯示機櫃資訊
     public class RackRevitInfoPage : MonoBehaviour, RackRevitInfoPage.IRackModelDataExtended
     {
         [SerializeField] private List<MonoBehaviour> receiverComps;
@@ -33,6 +34,8 @@ namespace VictorDev.TCIT
             receiverComps = components.Where(comp=> comp != this && comp is IRackModelDataExtended).ToList();
         }
 
+        /// 關閉頁面
+        public void ClosePage() => gameObject.SetActive(false);
 
         public interface IRackModelDataExtended
         {
@@ -41,6 +44,5 @@ namespace VictorDev.TCIT
                 
         [Space(100)]        
         public RackModelDataExtended rackRevitAssetData;
-
     }
 }

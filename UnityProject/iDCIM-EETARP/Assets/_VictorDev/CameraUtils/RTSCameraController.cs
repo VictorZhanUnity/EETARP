@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using VictorDev.Common;
@@ -9,7 +10,7 @@ namespace VictorDev.CameraUtils
     /// https://chatgpt.com/share/67fcb5ab-b03c-8012-b685-28ab8ee23da5
     public class RTSCameraController : MonoBehaviour
     {
-        [Header(">>> LookAt對像")] [SerializeField] private Transform target;
+        [Header(">>> LookAt對像")] [SerializeField] private Transform lookAtTarget;
 
         [Header(">>> 移動邊界BoxCollider Trigger")]
         public BoxCollider boundsCollider;
@@ -34,9 +35,12 @@ namespace VictorDev.CameraUtils
 
         [Header("Movement")] public float moveSpeed = 3f;
         public float moveDampTime = 0.2f;
+        public float flyDampTime = 0.5f;
         public float edgeSizePercent = 0.02f;
         public bool enableEdgeMovement = false;
 
+        private float _movementDampTime;
+        
         [Header("Movement Speed Adjustment Based on Distance")] // 🔄
         public float
             moveSpeedMultiplier = 0.15f; // 🔄 Adjust move speed based on distance (lower values for faster movement)
@@ -57,9 +61,9 @@ namespace VictorDev.CameraUtils
             x = angles.y;
             y = angles.x;
 
-            if (target != null)
+            if (lookAtTarget != null)
             {
-                currentTargetPosition = target.position;
+                currentTargetPosition = lookAtTarget.position;
             }
 
             currentDistance = distance;
@@ -72,7 +76,7 @@ namespace VictorDev.CameraUtils
 
         void Update()
         {
-            if (target == null) return;
+            if (lookAtTarget == null) return;
             if (EventHelper.IsUsingInputField) return;
             
             HandleMovementInput();
@@ -97,6 +101,17 @@ namespace VictorDev.CameraUtils
             if (kb.dKey.isPressed) input += new Vector3(1, 0, 0);
             if (kb.eKey.isPressed) input += new Vector3(0, 1, 0);
             if (kb.qKey.isPressed) input += new Vector3(0, -1, 0);
+            
+            var keys = new[]
+            {
+                kb.wKey, kb.aKey, kb.sKey,
+                kb.dKey, kb.qKey, kb.eKey
+            };
+
+            if (keys.Any(k => k.wasPressedThisFrame))
+            {
+                _movementDampTime = moveDampTime;
+            }
 
             if (input != Vector3.zero)
             {
@@ -204,12 +219,12 @@ namespace VictorDev.CameraUtils
                 currentTargetPosition.z = Mathf.Clamp(currentTargetPosition.z, moveBounds.min.z, moveBounds.max.z);
             }
 
-            Vector3 dampedTarget = Vector3.SmoothDamp(target.position, currentTargetPosition, ref targetMoveVelocity,
-                moveDampTime);
-            target.position = dampedTarget;
+            Vector3 dampedTarget = Vector3.SmoothDamp(lookAtTarget.position, currentTargetPosition, ref targetMoveVelocity,
+                _movementDampTime);
+            lookAtTarget.position = dampedTarget;
 
             Vector3 offset = transform.rotation * new Vector3(0, 0, -currentDistance);
-            transform.position = target.position + offset;
+            transform.position = lookAtTarget.position + offset;
         }
 
         public void SetTarget(Vector3 position, float setDistance = -1f)
@@ -221,8 +236,17 @@ namespace VictorDev.CameraUtils
             }
         }
 
+        public void FlyToPosition(GameObject target)
+        {
+            if (target.TryGetComponent(out Renderer render))
+                FlyToPosition(render.bounds.center);
+            else
+                FlyToPosition(target.transform.position);
+        }
+
         public void FlyToPosition(Vector3 position, float setDistance = -1f)
         {
+                _movementDampTime = flyDampTime;
             SetTarget(position, setDistance);
         }
     }

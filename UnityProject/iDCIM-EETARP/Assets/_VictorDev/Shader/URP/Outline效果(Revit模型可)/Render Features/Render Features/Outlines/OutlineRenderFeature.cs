@@ -30,10 +30,10 @@ namespace Xenon
             public float OutlineScale = 1f;
             public float RobertsCrossMultiplier = 100;
             public float DepthThreshold = 10f;
-            public float NormalThreshold = 0.4f;
+            public float NormalThreshold = 1f;
             public float SteepAngleThreshold = 0.2f;
             public float SteepAngleMultiplier = 25f;
-            public Color OutlineColor = Color.white;
+            [ColorUsage(true, true)]public Color OutlineColor = Color.white;
         }
 
         public class OutlineData : ContextItem

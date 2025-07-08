@@ -8,6 +8,7 @@ using VictorDev.Revit;
 
 namespace VictorDev.TCIT
 {
+    /// 顯示設備資訊
     public class DeviceRevitInfoPage : MonoBehaviour, DeviceRevitInfoPage.IDeviceModelDataExtended
     {
         [SerializeField] private List<MonoBehaviour> receiverComps;
@@ -34,6 +35,10 @@ namespace VictorDev.TCIT
             var components = GetComponentsInChildren<MonoBehaviour>();
             receiverComps = components.Where(comp=> comp != this && comp is IDeviceModelDataExtended).ToList();
         }
+        
+        /// 關閉頁面
+        public void ClosePage() => gameObject.SetActive(false);
+        
         public interface IDeviceModelDataExtended
         {
             void ReceiveDeviceModelData(DeviceModelDataExtended deviceModelData);
