@@ -7,9 +7,12 @@ namespace VictorDev.DemoUtils
 {
     public class ValueAutoJumper : MonoBehaviour
     {
-        public UnityEvent<int> onValueChangedInt;
-        public UnityEvent<float> onValueChangedFloat;
+        [Foldout("[Event] - Invoke字串型態")]
         public UnityEvent<string> onValueChangedString;
+        [Foldout("[Event] - Invoke數字型態")]
+        public UnityEvent<int> onValueChangedInt;
+        [Foldout("[Event] - Invoke數字型態")]
+        public UnityEvent<float> onValueChangedFloat;
 
         private void OnEnable()
         {
@@ -19,23 +22,34 @@ namespace VictorDev.DemoUtils
         [Button] 
         public void StartJump()
         {
-            IEnumerator JumpValue()
+            if (Application.isPlaying)
             {
-                while (true)
+                IEnumerator JumpValue()
                 {
-                    float value = Random.Range(minValue, maxValue);
-                    float multiplier = Mathf.Pow(10f, afterDotNumber);
-
-                    string dotFormat = (afterDotNumber>0)? "." + new string('#', afterDotNumber) : "";
-                    
-                    onValueChangedInt?.Invoke(Mathf.RoundToInt(value));
-                    onValueChangedFloat?.Invoke(Mathf.Round(value * multiplier) / multiplier);
-                    onValueChangedString?.Invoke(value.ToString($"0{dotFormat}"));
-                    yield return new WaitForSeconds(intervalSec);
+                    while (true)
+                    {
+                        ValueHandler();
+                        yield return new WaitForSeconds(intervalSec);
+                    }
                 }
+                _coroutine = StartCoroutine(JumpValue());
             }
+            else
+            {
+                ValueHandler();
+            }
+        }
 
-            _coroutine = StartCoroutine(JumpValue());
+        private void ValueHandler()
+        {
+            float value = Random.Range(minValue, maxValue);
+            float multiplier = Mathf.Pow(10f, afterDotNumber);
+
+            string dotFormat = (afterDotNumber>0)? "." + new string('#', afterDotNumber) : "";
+                    
+            onValueChangedInt?.Invoke(Mathf.RoundToInt(value));
+            onValueChangedFloat?.Invoke(Mathf.Round(value * multiplier) / multiplier);
+            onValueChangedString?.Invoke(value.ToString($"0{dotFormat}"));
         }
 
         private void OnDisable()
