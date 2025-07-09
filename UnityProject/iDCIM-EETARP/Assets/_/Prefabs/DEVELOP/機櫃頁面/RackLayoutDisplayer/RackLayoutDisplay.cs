@@ -17,6 +17,8 @@ namespace VictorDev.TCIT
 
         [Foldout("[Event] - 點擊設備詳細資訊時Invoke")]
         public UnityEvent<DeviceModelDataExtended> onDeviceDetailClicked = new();
+        [Foldout("[Event] - 點擊設備詳細資訊時Invoke")]
+        public UnityEvent<GameObject> onDeviceModelClicked = new();
         
         public void ReceiveRackModelData(RackModelDataExtended rackModelData)
         {
@@ -28,19 +30,17 @@ namespace VictorDev.TCIT
         {
             ObjectHelper.DestoryObjectsOfContainer(DeviceContainer);
 
-#if UNITY_EDITOR
-
             _rackModelData.Containers.ForEach(deviceData =>
             {
-                RackLayoutListItem item =
-                    PrefabUtility.InstantiatePrefab(listItemPrefab, DeviceContainer) as RackLayoutListItem;
+                RackLayoutListItem item = ObjectHelper.Instantiate(listItemPrefab, DeviceContainer);
                 item.ReceiveDeviceModelData(deviceData);
                 item.toggleGroup = ToggleGroupInstance;
-                //item.onToggleValueChanged.AddListener(onDeviceClicked.Invoke);
-                item.onToggleValueChanged.AddListener((data, tg)=> onDeviceDetailClicked?.Invoke(data));
+                item.onToggleValueChanged.AddListener((data, tg)=>
+                {
+                    onDeviceDetailClicked?.Invoke(data);
+                    onDeviceModelClicked?.Invoke(data.Model.gameObject);
+                });
             });
-#endif
-            
             ScrollRectList.verticalNormalizedPosition = 1;
         }
 

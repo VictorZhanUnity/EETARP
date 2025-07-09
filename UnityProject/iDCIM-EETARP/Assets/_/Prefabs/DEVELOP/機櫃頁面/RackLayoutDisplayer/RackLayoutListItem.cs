@@ -25,6 +25,9 @@ namespace VictorDev.TCIT
             TxtDeviceType.SetText(_deviceModelData.DeviceType);
             name = $"[U{_deviceModelData.rackLocation}][{_deviceModelData.DeviceKind}] - {_deviceModelData.DeviceName} - {_deviceModelData.information.heightU}U";
             
+            // 取得Item原始高度
+            _originalItemHeight= ItemHeight;
+            
             // 設置Rack位置
             int posY = Mathf.RoundToInt((_deviceModelData.rackLocation - 1) * _originalItemHeight);
             transform.localPosition = new Vector3(0, posY, 0f);
@@ -36,8 +39,6 @@ namespace VictorDev.TCIT
 
         private void OnEnable()
         { 
-            // 取得Item原始高度
-            if(_originalItemHeight == 0) _originalItemHeight= ItemHeight;
             ToggleInstance.onValueChanged.AddListener(OnValueChanged);
         }
 
