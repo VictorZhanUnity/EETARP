@@ -13,6 +13,9 @@ public class Landmark : MonoBehaviour
     [Foldout("[Event] - Toggle點選時Invoke")]
     public UnityEvent<bool> onToggleValueChanged = new();
     
+    [Foldout("[Event] - True時Invoke 定位物件")]
+    public UnityEvent<GameObject> invokeGameObject = new();
+    
     public void SetLabel(string value)
     {
         label = value;
@@ -39,7 +42,11 @@ public class Landmark : MonoBehaviour
         ToggleInstance.onValueChanged.RemoveListener(OnToggleValueChangedHandler);
     }
 
-    private void OnToggleValueChangedHandler(bool isOn) => onToggleValueChanged?.Invoke(isOn);
+    private void OnToggleValueChangedHandler(bool isOn)
+    {
+        onToggleValueChanged?.Invoke(isOn);
+        if(isOn) invokeGameObject?.Invoke(PosTo2DPoint.Target3DObject.gameObject);
+    }
 
     private void OnValidate()
     {
@@ -49,7 +56,6 @@ public class Landmark : MonoBehaviour
         TxtLabelSelected.SetText(label);
     }
     #endregion
-    
     
     private Toggle ToggleInstance => _toggle ??= transform.Find("Container").GetComponent<Toggle>();
     [NonSerialized] private Toggle _toggle;

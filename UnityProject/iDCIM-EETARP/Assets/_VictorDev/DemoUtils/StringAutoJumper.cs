@@ -55,7 +55,6 @@ namespace VictorDev.DemoUtils
             if (isUseSoData && demoStringData != null)
             {
                 result = demoStringData.GetRandomStringValue();
-                Debug.Log($"GetRandomStringValue: {result}");
             }
             else
             {

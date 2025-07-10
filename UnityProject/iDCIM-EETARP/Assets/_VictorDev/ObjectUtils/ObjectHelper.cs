@@ -136,13 +136,6 @@ namespace VictorDev.Common
             List<Transform> children = parent.GetComponentsInChildren<Transform>().ToList();
             
             children.ForEach(child=> child.SetAsFirstSibling());
-
-            return;
-            
-            for (int i = 0; i < parent.childCount; i++)
-            {
-                parent.GetChild(parent.childCount - 1).SetSiblingIndex(i);
-            }
         }
         
         

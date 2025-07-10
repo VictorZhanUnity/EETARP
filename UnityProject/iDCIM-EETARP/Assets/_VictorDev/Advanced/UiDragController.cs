@@ -36,7 +36,7 @@ namespace VictorDev.Advanced
             _targetPosition = ClampToCanvas(_targetPosition);
 
             // 使用 DoTween 動畫過渡
-            _moveTween = bodyRectTransform.DOAnchorPos(_targetPosition, 0.15f).SetEase(Ease.OutQuad);
+            _moveTween = bodyRectTransform.DOAnchorPos(_targetPosition, duration).SetEase(easeType);
         }
 
         public void OnEndDrag(PointerEventData eventData)

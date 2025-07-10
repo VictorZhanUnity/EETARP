@@ -15,9 +15,9 @@ public class ToggleMediator : MonoBehaviour
     {
         set
         {
+           invokeEvent?.Invoke(value);
            if(value) invokeIsOn?.Invoke();
            else invokeIsOff?.Invoke();
-           invokeEvent?.Invoke(value);
         }
     }
 }

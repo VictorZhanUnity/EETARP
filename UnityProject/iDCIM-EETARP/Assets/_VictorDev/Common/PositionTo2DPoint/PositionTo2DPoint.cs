@@ -51,7 +51,7 @@ namespace VictorDev.Common
         /// 設定可視距離
         public void SetVisibleRange(float range) => visibleRange = range;
 
-        #region Components
+        #region Variables
         [Header(">>> 目標3D物件")] [SerializeField] Transform target3DObject;
 
         public Transform Target3DObject => target3DObject;

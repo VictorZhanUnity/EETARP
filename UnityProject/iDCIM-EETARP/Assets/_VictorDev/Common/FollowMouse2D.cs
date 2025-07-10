@@ -21,7 +21,7 @@ namespace VictorDev.Common
             }
 
             // 新增Tween平滑移動到目標位置（Ease可調）
-            _moveTween = transform.DOMove(targetPos, duration).SetEase(Ease.OutQuad);
+            _moveTween = transform.DOMove(targetPos, duration).SetEase(ease);
         }
 
         [Foldout("[位置設定]")] [SerializeField] private Vector3 offsetPos = Vector3.zero;
