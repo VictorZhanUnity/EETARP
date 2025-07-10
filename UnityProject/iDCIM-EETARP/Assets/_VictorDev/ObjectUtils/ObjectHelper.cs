@@ -14,6 +14,45 @@ namespace VictorDev.Common
     /// GameObject物件處理
     public static class ObjectHelper
     {
+        public static void SetMatchSizeAndPosition(GameObject target, GameObject reference, float adjustScale = 1.01f)
+        {
+            Renderer targetRenderer;
+            if (target.TryGetComponent(out targetRenderer) == false)
+            {
+                Debug.LogWarning($"{targetRenderer.name} 沒有 Renderer", nameof(This), EmojiEnum.Error);
+                return;
+            }
+            
+            Renderer refRenderer;
+            if (reference.TryGetComponent(out refRenderer) == false)
+            {
+                Debug.LogWarning($"{reference.name} 沒有 Renderer", nameof(This), EmojiEnum.Error);
+                return;
+            }
+
+            // 取得 reference 的 bounds 尺寸
+            Vector3 refSize = refRenderer.bounds.size;
+            Vector3 targetSize = targetRenderer.bounds.size;
+
+            if (targetSize == Vector3.zero)
+            {
+                Debug.LogWarning("Target 的 Renderer size 是 0，可能是模型沒載入或尺寸為零");
+                return;
+            }
+
+            // 計算比例並應用到 localScale
+            Vector3 scaleRatio = new Vector3(
+                refSize.x / targetSize.x,
+                refSize.y / targetSize.y,
+                refSize.z / targetSize.z
+            );
+
+            // 根據目前的 localScale 進行縮放
+            target.transform.localScale = Vector3.Scale(target.transform.localScale, scaleRatio) * adjustScale;
+            target.transform.position = refRenderer.bounds.center;
+        }
+        
+        
         /// 從子物件起開始尋找有實作T Class的Monobehaviour
         /// 通常會用於尋找實作Interface的對像
         public static List<MonoBehaviour> FindChildrenByClass<T>(Transform parent, bool includeInactive = true)

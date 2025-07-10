@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEngine;
 using Random = UnityEngine.Random;
+using Debug = VictorDev.Common.Debug;
 
 namespace VictorDev.DoTweenUtils
 {
@@ -37,6 +40,31 @@ namespace VictorDev.DoTweenUtils
                 startValue = x;
                 onUpdate.Invoke(startValue);
             }, endValue, duration).SetDelay(dealy).SetEase(Ease.OutQuad);
+        }
+        
+        /// 待測試
+        public static Tween DoFade(GameObject target, float duration, float endValue = 1, float fromValue = 0
+            , float delay = 0, bool isRandomDelay = false, Ease ease = Ease.OutBounce)
+        {
+            if (target.TryGetComponent(out Renderer renderer))
+            {
+                DOTween.Kill(renderer.material);
+                Color originalColor = renderer.material.color, toColor = renderer.material.color;
+                originalColor.a = fromValue;
+                toColor.a = endValue;
+                
+                // DOTween 淡入
+                return renderer.material.DOColor(toColor, "_BaseColor", 1).From(originalColor)
+                    .SetDelay(Random.Range(isRandomDelay ? 0 : delay, delay)).SetEase(ease); // 1秒淡入到不透明
+                
+                /*return renderer.material.DOFade(endValue, duration).From(0)
+                    .SetDelay(Random.Range(isRandomDelay ? 0 : delay, delay)).SetEase(ease); // 1秒淡入到不透明*/
+            }
+            else
+            {
+                Debug.LogWarning("Target does not have a renderer", typeof(This), EmojiEnum.Warning);
+                return null;
+            }
         }
 
         /// NEW===========================================================================================

@@ -67,6 +67,7 @@ namespace VictorDev.ShaderUtils
                 _lastSelectedObject.layer = _originalLayer;
                 _lastSelectedObject = null;
             }
+            unSelectEvent?.Invoke();
         }
     }
 }
