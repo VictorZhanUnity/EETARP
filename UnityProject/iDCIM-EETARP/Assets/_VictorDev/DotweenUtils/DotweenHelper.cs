@@ -12,23 +12,21 @@ namespace VictorDev.DoTweenUtils
             float delay = 0, bool isRandomDelay = false)
             => targets.ForEach(txt => ToBlink(txt, showText, duration, delay, isRandomDelay));
 
-        /// <summary>
         /// 閃爍後顯示指定文字
         /// <para>+ showText：顯示指定文字</para>
         /// <para>+ duration若太低，效果會不明顯</para>
-        /// </summary>
         public static void ToBlink(TextMeshProUGUI target, string showText = null, float duration = 0.1f,
             float delay = 0, bool isRandomDelay = false)
         {
             DOTween.Kill(target);
             // 首先将Text的透明度设置为0（完全透明）
-            target.DOFade(0f, duration).OnComplete(() =>
+            target.DOFade(0f, 0).OnComplete(() =>
             {
                 // 更改文本内容
                 if (showText != null) target.SetText(showText);
                 // 然后将Text的透明度从0渐变为1（完全不透明）
-                target.DOFade(1f, duration).SetEase(Ease.OutBounce);
-            }).SetDelay(Random.Range(isRandomDelay ? 0 : delay, delay));
+                target.DOFade(1f, duration).SetEase(Ease.OutBounce).SetDelay(Random.Range(isRandomDelay ? 0 : delay, delay));
+            });
         }
 
         public static Tween LerpValue(float startValue, float endValue, Action<float> onUpdate,

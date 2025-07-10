@@ -14,6 +14,14 @@ namespace VictorDev.Common
     /// GameObject物件處理
     public static class ObjectHelper
     {
+        /// 從子物件起開始尋找有實作T Class的Monobehaviour
+        /// 通常會用於尋找實作Interface的對像
+        public static List<MonoBehaviour> FindChildrenByClass<T>(Transform parent, bool includeInactive = true)
+            => parent.GetComponentsInChildren<T>(includeInactive)
+                .Select(jumper=> jumper as MonoBehaviour)
+                .Where(jumper => jumper != null)
+                .ToList();
+        
         /// 依照環境 Runtime/Editor 來實例化對像物件T
         /// <para>+ 若container為null，則實例化在Scene根節點</para>
         public static T Instantiate<T>(T prefab, Transform container=null) where T: Component

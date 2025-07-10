@@ -11,19 +11,20 @@ namespace VictorDev.TCIT
     /// 顯示設備資訊
     public class DeviceRevitInfoPage : MonoBehaviour, DeviceRevitInfoPage.IDeviceModelDataExtended
     {
-        [SerializeField] private List<MonoBehaviour> receiverComps;
-        
+        [Foldout("[設定] - 接收器組件")][SerializeField] private List<MonoBehaviour> receiverComps;
+        [Foldout("[Event] - 接收到資料時Invoke")] public UnityEvent onReceiveDataEvent;
+
         public void ReceiveDeviceModelData(DeviceModelDataExtended deviceModelData)
         {
-            
-            deviceRevitAssetData = deviceModelData;
+            _deviceRevitAssetData = deviceModelData;
             InvokeData();
         }
 
         private void InvokeData()
         {
-            receiverComps.Cast<IDeviceModelDataExtended>().ToList().ForEach(receiver=> receiver.ReceiveDeviceModelData(deviceRevitAssetData));
+            receiverComps.Cast<IDeviceModelDataExtended>().ToList().ForEach(receiver=> receiver.ReceiveDeviceModelData(_deviceRevitAssetData));
             gameObject.SetActive(true);
+            onReceiveDataEvent?.Invoke();
         }
 
         private void OnValidate() => receiverComps = ObjectHelper.CheckTypoOfList<IDeviceModelDataExtended>(receiverComps);
@@ -43,13 +44,13 @@ namespace VictorDev.TCIT
         {
             void ReceiveDeviceModelData(DeviceModelDataExtended deviceModelData);
         }
-        public DeviceModelDataExtended deviceRevitAssetData;
+        private DeviceModelDataExtended _deviceRevitAssetData;
 
 
         [Foldout("[Event] - 下架設備")] public UnityEvent<DeviceModelDataExtended> removeDeviceFromRack;
         public void ShutdownAndRemove()
         {
-            removeDeviceFromRack?.Invoke(deviceRevitAssetData);
+            removeDeviceFromRack?.Invoke(_deviceRevitAssetData);
         }
     }
 }

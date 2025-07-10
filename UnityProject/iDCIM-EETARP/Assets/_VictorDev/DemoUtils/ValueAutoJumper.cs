@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace VictorDev.DemoUtils
 {
-    public class ValueAutoJumper : MonoBehaviour
+    public class ValueAutoJumper : MonoBehaviour, IAutoJumper
     {
         [Foldout("[Event] - Invoke字串型態")]
         public UnityEvent<string> onValueChangedString;
@@ -16,19 +16,20 @@ namespace VictorDev.DemoUtils
 
         private void OnEnable()
         {
-            if (isActivatedInEnabled) StartJump();
+            if (isStartInEnabled) StartJump();
         }
 
         [Button] 
         public void StartJump()
         {
+            if(_coroutine != null) StopCoroutine(_coroutine);
             if (Application.isPlaying)
             {
                 IEnumerator JumpValue()
                 {
                     while (true)
                     {
-                        ValueHandler();
+                        ValueUpdate();
                         yield return new WaitForSeconds(intervalSec);
                     }
                 }
@@ -36,11 +37,12 @@ namespace VictorDev.DemoUtils
             }
             else
             {
-                ValueHandler();
+                ValueUpdate();
             }
         }
 
-        private void ValueHandler()
+        /// 設置Value
+        private void ValueUpdate()
         {
             float value = Random.Range(minValue, maxValue);
             float multiplier = Mathf.Pow(10f, afterDotNumber);
@@ -52,6 +54,13 @@ namespace VictorDev.DemoUtils
             onValueChangedString?.Invoke(value.ToString($"0{dotFormat}"));
         }
 
+        public void ValueUpdateByManual()
+        {
+            ValueUpdate();
+            if (isStartInEnabled) StartJump();
+        }
+        
+
         private void OnDisable()
         {
             if (_coroutine != null) StopCoroutine(_coroutine);
@@ -59,10 +68,10 @@ namespace VictorDev.DemoUtils
 
         #region Variables
 
-        [Foldout("[設定]")] [SerializeField] private bool isActivatedInEnabled = true;
+        [Foldout("[設定]")] [SerializeField] private bool isStartInEnabled = true;
 
         [Foldout("[設定]")] [Header("更新時間間隔")] [SerializeField]
-        private float intervalSec = 5f;
+        private float intervalSec = 10f;
 
         [Foldout("[設定]")] [Header("小數點後幾位")] [SerializeField]
         private int afterDotNumber = 2;

@@ -22,6 +22,7 @@ namespace VictorDev.Common
         /// Log訊息處理
         private static void LogMessage(EnumLogType logType, object message, object callerClass, EmojiEnum emojiEnum, bool isPrintArrow)
         {
+            if (isLogEnable == false) return;
             string msg = $"{EmojiHelper.GetEmoji(emojiEnum)} ";
             msg += callerClass != null ? $"[ {callerClass?.GetType().Name} ] " : "";
             msg += (isPrintArrow? ":> " : " ") + message;
@@ -45,14 +46,11 @@ namespace VictorDev.Common
                     action = () => UnityEngine.Debug.LogError(msg);
                     break;
             }
+            action?.Invoke();
+        }
 
-           if(action != null) CheckIsEditorEnviorment(action);
-        }
         /// 檢查是否為Editor環境，是才會Log訊息
-        private static void CheckIsEditorEnviorment(Action action)
-        {
-            if (Application.isEditor || IsLogInRuntime) action?.Invoke();
-        }
+        private static bool isLogEnable => (Application.isEditor || IsLogInRuntime);
         #endregion
 
         private enum EnumLogType

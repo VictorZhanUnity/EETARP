@@ -9,7 +9,8 @@ namespace VictorDev.DoTweenUtils
     {
         public void SetText(string text)
         {
-            DotweenHelper.ToBlink(Txt, text.TrimEnd(), duration, delay, isRandomDelay);
+            text = text.Trim();
+            DotweenHelper.ToBlink(Txt, text, duration, delay, isRandomDelay);
         }
 
         [Foldout("設定")] [SerializeField] private float duration = 0.1f;

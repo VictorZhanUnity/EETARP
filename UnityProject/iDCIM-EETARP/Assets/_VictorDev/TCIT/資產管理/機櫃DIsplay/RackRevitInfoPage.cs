@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Events;
 using VictorDev.Common;
 using VictorDev.Revit;
 
@@ -10,18 +11,20 @@ namespace VictorDev.TCIT
     /// 顯示機櫃資訊
     public class RackRevitInfoPage : MonoBehaviour, RackRevitInfoPage.IRackModelDataExtended
     {
-        [SerializeField] private List<MonoBehaviour> receiverComps;
+        [Foldout("[設定] - 接收器組件")][SerializeField] private List<MonoBehaviour> receiverComps;
+        [Foldout("[Event] - 接收到資料時Invoke")] public UnityEvent onReceiveDataEvent;
         
         public void ReceiveRackModelData(RackModelDataExtended rackModelData)
         {
-            rackRevitAssetData = rackModelData;
+            _rackRevitAssetData = rackModelData;
             InvokeData();
         }
 
         private void InvokeData()
         {
-            receiverComps.Cast<IRackModelDataExtended>().ToList().ForEach(receiver=> receiver.ReceiveRackModelData(rackRevitAssetData));
+            receiverComps.Cast<IRackModelDataExtended>().ToList().ForEach(receiver=> receiver.ReceiveRackModelData(_rackRevitAssetData));
             gameObject.SetActive(true);
+            onReceiveDataEvent?.Invoke();
         }
 
         private void OnValidate() => receiverComps = ObjectHelper.CheckTypoOfList<IRackModelDataExtended>(receiverComps);
@@ -41,8 +44,6 @@ namespace VictorDev.TCIT
         {
             void ReceiveRackModelData(RackModelDataExtended rackModelData);
         }
-                
-        [Space(100)]        
-        public RackModelDataExtended rackRevitAssetData;
+        private RackModelDataExtended _rackRevitAssetData;
     }
 }

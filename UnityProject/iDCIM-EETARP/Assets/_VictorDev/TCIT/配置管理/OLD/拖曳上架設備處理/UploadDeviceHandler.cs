@@ -16,14 +16,7 @@ public class UploadDeviceHandler : MonoBehaviour, IRevitModelDataExtended
     [Header("[Event] - 點擊機櫃U層時進行上架Event {庫存設備，目標機櫃，佔用U層數}")]
     public UnityEvent<DeviceModelDataExtended, RackModelDataExtended, List<int>> onUploadDevice = new();
 
-    /// 接收目前所選擇的庫存設備 
-    public void ReceiveSelectedStockDevice(DeviceModelDataExtended stockDevice)
-    {
-        CancelUploadDevice();
-        _selectedStockDevice = stockDevice;
-        InitialDragDevice();
-    }
-    
+    /// 接收目前所選擇的機櫃/設備 
     public void ReceiveData(RevitModelDataExtended revitModelDataExtended)
     {
         ReviteModelData = revitModelDataExtended;
