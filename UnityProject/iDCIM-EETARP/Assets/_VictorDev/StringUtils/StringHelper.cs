@@ -11,14 +11,7 @@ namespace VictorDev.Common
 {
     public static class StringHelper
     {
-        /// [Extension] - 首英文字大寫
-        public static string ToCapitalizeFirstLetter(this string str)
-        {
-            if (string.IsNullOrEmpty(str)) return str;
-            return char.ToUpper(str[0]) + str.Substring(1);
-        }
-        
-        /// 字串依照文字長度進行分割批次
+       /// 字串依照文字長度進行分割批次
         public static List<string> SplitString(string stringData, int chunkSize=500000)
         {
             List<string> chunks = new List<string>();

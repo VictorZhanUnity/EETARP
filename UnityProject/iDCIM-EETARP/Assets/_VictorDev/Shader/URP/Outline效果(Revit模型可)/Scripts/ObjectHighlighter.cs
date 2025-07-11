@@ -26,11 +26,17 @@ namespace VictorDev.ShaderUtils
 
         private void Start() => _outlineLayer = LayerMask.NameToLayer(outlineLayerName);
 
-        /// High物目標物件
+        public void ForceHightlightObject(GameObject target)
+            => HighlightHandler(target, true);
+
         public void HighlightObject(GameObject target)
+            => HighlightHandler(target);
+
+        /// Highlight物目標物件
+        private void HighlightHandler(GameObject target, bool isForced = false)
         {
-            if (toggleLock.isOn == false) return;
-            
+            if (toggleLock.isOn == false && isForced == false) return;
+
             if (objectKeywords.Any(word =>
                     target.name.Contains(word, StringComparison.CurrentCultureIgnoreCase)) == false)
             {
@@ -46,7 +52,7 @@ namespace VictorDev.ShaderUtils
                 {
                     ClearHighlight();
                     unSelectEvent?.Invoke();
-                    return;
+                    if (isForced == false) return;
                 }
 
                 ClearHighlight();
@@ -67,6 +73,7 @@ namespace VictorDev.ShaderUtils
                 _lastSelectedObject.layer = _originalLayer;
                 _lastSelectedObject = null;
             }
+
             unSelectEvent?.Invoke();
         }
     }

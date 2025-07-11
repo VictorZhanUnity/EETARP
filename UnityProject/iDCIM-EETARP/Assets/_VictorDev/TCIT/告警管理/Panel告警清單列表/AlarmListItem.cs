@@ -1,29 +1,66 @@
 using System;
+using _VictorDEV.DateTimeUtils;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using VictorDev.DoTweenUtils;
 
 namespace VictorDev.TCIT.AlarmModule
 {
-    public class AlarmListItem : MonoBehaviour
+    /// 告警列表資料項目
+    public class AlarmListItem : MonoBehaviour, AlarmDataManager.IAlarmData
     {
-        [HideInInspector] public UnityEvent<bool> onValueChanged;
-        private void OnEnable() => ToggleInstance.onValueChanged.AddListener(OnValueChangedHandler);
-        private void OnDisable() => ToggleInstance.onValueChanged.RemoveListener(OnValueChangedHandler);
-        private void OnValueChangedHandler(bool isOn)
+        [HideInInspector] public UnityEvent<AlarmListItem> onItemSelected;
+        public AlarmData alarmData { get; private set; }
+
+        public void ReceiveData(AlarmData data)
         {
-            onValueChanged?.Invoke(isOn);
+            alarmData = data;
+            UpdateUI();
         }
 
+        private void UpdateUI()
+        {
+            ToggleAlarmType.isOn = alarmData.alarmType == AlarmData.AlarmType.Critical;
+            TxtSystem.SetText(alarmData.alarmSystem.ToString());
+            TxtTime.SetText(alarmData.alarmTime.ToString("hh:mm:SS tt", System.Globalization.CultureInfo.CreateSpecificCulture("en-US")));
+        }
+
+        #region Initialized
+        private void OnEnable() => ToggleInstance.onValueChanged.AddListener(OnValueChangedHandler);
+        private void OnDisable()
+        {
+            ToggleInstance.onValueChanged.RemoveListener(OnValueChangedHandler);
+        }
+
+        private void OnValueChangedHandler(bool isOn)
+        {
+            if (isOn) onItemSelected?.Invoke(this);
+        }
+        #endregion
+
+       
+        #region Variables
+       
         public ToggleGroup toggleGroup
         {
             set => ToggleInstance.group = value;
         }
+
+        public bool IsOn
+        {
+            set => ToggleInstance.isOn = value;
+        }
         
         private Toggle ToggleInstance => _toggle ??= transform.Find("Container").GetComponent<Toggle>();
-        [NonSerialized] private Toggle _toggle;
+        private Toggle ToggleAlarmType => _toggleAlarmType ??= transform.Find("Container/ToggleAlarmType").GetComponent<Toggle>();
+        [NonSerialized] private Toggle _toggle, _toggleAlarmType;
+        private TextDotweener TxtSystem => _txtSystem ??= transform.Find("Container/TxtSystem").GetComponent<TextDotweener>();
+        private TextDotweener TxtTime => _txtTime ??= transform.Find("Container/TxtTime").GetComponent<TextDotweener>();
+        [NonSerialized] private TextDotweener _txtSystem, _txtTime;
+        #endregion
+       
 
-        private Toggle AlarmType => _alarmType ??= transform.Find("Container/ToggleAlarmType").GetComponent<Toggle>();
-        [NonSerialized] private Toggle _alarmType;
     }
 }

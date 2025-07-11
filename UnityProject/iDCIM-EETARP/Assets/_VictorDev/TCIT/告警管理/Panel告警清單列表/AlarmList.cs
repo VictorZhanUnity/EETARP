@@ -2,40 +2,69 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NaughtyAttributes;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using VictorDev.Common;
 
 namespace VictorDev.TCIT.AlarmModule
 {
-    public class AlarmList : MonoBehaviour
+    public class AlarmList : MonoBehaviour, AlarmDataManager.IAlarmDataList
     {
-        public UnityEvent<bool> onItemValueChanged;
+        [Foldout("[Event] - 點擊Item時Invoke")]
+        public UnityEvent<AlarmListItem> onItemSelected;
 
-        private void Start()
+
+        public void ReceiveData(List<AlarmData> data)
         {
+            _alarmData = data;
             UpdateUI();
         }
-
+        
 
         private void UpdateUI()
         {
-            List<AlarmListItem> itemList = GetComponentsInChildren<AlarmListItem>().ToList();
-            itemList.ForEach(item =>
+            ClearData();
+            
+            _alarmData.ForEach(data =>
             {
+                AlarmListItem item = ObjectHelper.Instantiate(listItemPrefab, ScrollRectInstance.content);
+                item.ReceiveData(data);
                 item.toggleGroup = ToggleGroupInstance;
-                item.onValueChanged.AddListener(OnItemValueChangedHandler);
+                item.onItemSelected.AddListener(OnItemSelectedHandler); 
             });
         }
 
-        private void OnItemValueChangedHandler(bool isOn)
+        private void OnItemSelectedHandler(AlarmListItem lisItem)
         {
-            onItemValueChanged?.Invoke(isOn);
+            onItemSelected?.Invoke(lisItem);
         }
 
-        [Foldout("[設定]")] [SerializeField] private AlarmListItem listItemPrefab;
+        private void ClearData()
+        {
+            ObjectHelper.DestoryObjectsOfContainer(ScrollRectInstance.content);
+            ScrollRectInstance.verticalNormalizedPosition = 1;
+        }
 
+        private void OnDisable()
+        {
+            _alarmData?.Clear();
+            ClearData();
+        }
+
+
+        #region Variables
+        
+        [Foldout("[Prefab]")]
+        [SerializeField] private AlarmListItem listItemPrefab;
+        private List<AlarmData> _alarmData;
+
+        private ScrollRect ScrollRectInstance => _scrollRect ??= transform.Find("Panel/Container/排序Table表格/ScrollRect滑動列表").GetComponent<ScrollRect>();
+        [NonSerialized] private ScrollRect _scrollRect;
+        
         private ToggleGroup ToggleGroupInstance => _toggleGroupInstance ??= GetComponent<ToggleGroup>();
         [NonSerialized] private ToggleGroup _toggleGroupInstance;
+        #endregion
     }
 }

@@ -9,6 +9,13 @@ namespace _VictorDEV.DateTimeUtils
     /// DateTime日期格式
     public static class DateTimeHelper
     {
+        /// 依照瀏覽的電腦系統換算UTC時間
+        public static DateTime GetLoaclTimeBySystem()
+        {
+            var offsetNow = System.DateTimeOffset.Now;
+            return offsetNow.LocalDateTime;
+        }
+        
         /// 2024-11-24 13:33:22
         public static string FullDateTimeFormat => $"{FullDateFormat} {FullTimeFormat}";
 

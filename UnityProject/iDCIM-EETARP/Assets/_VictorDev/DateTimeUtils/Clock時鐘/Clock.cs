@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using _VictorDEV.DateTimeUtils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using VictorDev.Common;
+using Debug = UnityEngine.Debug;
 
 namespace VictorDev.DateTimeUtils
 {
@@ -70,8 +72,8 @@ namespace VictorDev.DateTimeUtils
             string format = (is24Hrs) ? $"HH{symbol}mm" : $"tt hh{symbol}mm";
             if (isShowSec) format += $"{symbol}ss";
 
-            DateTime dateNow = DateTime.Now;
-
+            DateTime dateNow = DateTimeHelper.GetLoaclTimeBySystem();
+            
             float timeAdjust = 0f;
             dateNow = dateNow.AddHours(timeAdjust); //往回推 for Demo
 

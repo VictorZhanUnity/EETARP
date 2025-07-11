@@ -12,9 +12,13 @@ namespace VictorDev.MathUtils
         /// [float值]轉換成小數點後N位
         public static float ToDotNumberFloat(float value, int n = 1) =>
             Mathf.Round(value * Mathf.Pow(10, n)) / Mathf.Pow(10, n);
-        
+
         /// [float值]轉換成0~1的百分比數值
         public static float ToPercent01(float value, float maxValue = 100, int n = 1) =>
             ToDotNumberFloat(value / maxValue, n);
+
+        /// 以每step為一刻度，計算目標數字於該刻度的上限值
+        public static int GetNumberLevelMax(float targetValue, int step = 10)
+            => Mathf.CeilToInt(targetValue / (float)step) * step;
     }
 }
