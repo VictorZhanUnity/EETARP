@@ -4,7 +4,9 @@ using System.Linq;
 using NaughtyAttributes;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.UI;
 using VictorDev.Common;
+using VictorDev.MaterialUtils;
 using VictorDev.Revit;
 using Random = UnityEngine.Random;
 
@@ -16,13 +18,18 @@ namespace VictorDev.TCIT.AlarmModule
         public List<MonoBehaviour> receivers;
         
         [Label("[資料項]")]
-        [SerializeField] private List<AlarmData> alarmData; 
+        [SerializeField] private List<AlarmData> alarmData;
 
+        [NonSerialized] private List<AlarmData> _todayAlarmData = null;
+        
+        [Foldout("[Toggle Lock]")]
+        [SerializeField] private Toggle toggleLock;
+        
         public void ReceiveJsonString(string jsonString)
         {
             alarmData?.Clear();
             alarmData = JsonConvert.DeserializeObject<List<AlarmData>>(jsonString);
-            CheckAllDataExists();
+            CheckAllDataReceived();
         }
 
         private void InvokeData()
@@ -33,11 +40,29 @@ namespace VictorDev.TCIT.AlarmModule
             });
         }
 
-        private void CheckAllDataExists()
+        private void CheckAllDataReceived()
         {
             if (alarmData.IsNullOrEmpty() || _rackModelAssetList.IsNullOrEmpty()) return;
             TempDataFixed();
             alarmData = alarmData.OrderBy(data => data.alarmTime).ToList();
+
+            //暫存Today的資料
+            _todayAlarmData ??= alarmData.Copy();
+            InvokeData();
+
+           if(toggleLock.isOn) ShowTargetDevices();
+        }
+
+        /// 顯示告警的設備
+        public void ShowTargetDevices()
+        {
+            HashSet<Transform> devices = alarmData.Select(data => data.alarmTargetModel).ToHashSet();
+            ModelMaterialHandler.ReplaceMaterialWithExclude(devices);
+        }
+
+        public void ShowTodayAlarms()
+        {
+            alarmData = _todayAlarmData.Copy();
             InvokeData();
         }
 
@@ -50,7 +75,7 @@ namespace VictorDev.TCIT.AlarmModule
         {
             _rackModelAssetList?.Clear();
             _rackModelAssetList = rackModelAssetList;
-            CheckAllDataExists();
+            CheckAllDataReceived();
         }
 
         private void TempDataFixed()
@@ -66,7 +91,7 @@ namespace VictorDev.TCIT.AlarmModule
             }
             
             // 隨機刪除幾樣資料項
-            int removeCount = Random.Range(0, alarmData.Count);
+            int removeCount = Random.Range(0, Mathf.RoundToInt(alarmData.Count*0.8f));
             for (int i = 0; i < removeCount; i++)
             {
                 int randomIndex = Random.Range(0, alarmData.Count);
@@ -90,8 +115,5 @@ namespace VictorDev.TCIT.AlarmModule
             /// 接收告警ListItem
             void ReceiveData(AlarmListItem item);
         }
-
-        
-      
     }
 }

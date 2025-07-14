@@ -40,7 +40,7 @@ public class RackUnitDisplay : MonoBehaviour
 
     private void OnMouseExit()
     {
-       RackData.AvailableUDisplayer.ForEach(displayer=> displayer.HideULevel());
+       RackData?.AvailableUDisplayer.ForEach(displayer=> displayer.HideULevel());
     }
 
     private void Start() => HideULevel();

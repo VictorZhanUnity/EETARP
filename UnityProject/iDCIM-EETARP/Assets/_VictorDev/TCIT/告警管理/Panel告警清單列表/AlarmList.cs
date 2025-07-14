@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using VictorDev.Common;
+using Debug = UnityEngine.Debug;
 
 namespace VictorDev.TCIT.AlarmModule
 {
@@ -33,6 +34,7 @@ namespace VictorDev.TCIT.AlarmModule
                 item.ReceiveData(data);
                 item.toggleGroup = ToggleGroupInstance;
                 item.onItemSelected.AddListener(OnItemSelectedHandler); 
+                _listItems.Add(item);
             });
         }
 
@@ -41,8 +43,22 @@ namespace VictorDev.TCIT.AlarmModule
             onItemSelected?.Invoke(lisItem);
         }
 
+        /// 點擊告警的模型時
+        public void ClickModelAsset(GameObject target)
+        {
+            Debug.Log($"ClickModelAsset");
+            AlarmListItem item = _listItems.FirstOrDefault(item => item.alarmData.alarmTargetModel == target.transform);
+            if (item != null)
+            {
+                item.onItemSelected.Invoke(item);
+                item.IsOn = true;
+            }
+        }
+
         private void ClearData()
         {
+            _listItems ??= new List<AlarmListItem>();
+            _listItems?.Clear();
             ObjectHelper.DestoryObjectsOfContainer(ScrollRectInstance.content);
             ScrollRectInstance.verticalNormalizedPosition = 1;
         }
@@ -53,13 +69,14 @@ namespace VictorDev.TCIT.AlarmModule
             ClearData();
         }
 
-
         #region Variables
         
         [Foldout("[Prefab]")]
         [SerializeField] private AlarmListItem listItemPrefab;
         private List<AlarmData> _alarmData;
 
+        [NonSerialized] private List<AlarmListItem> _listItems;
+        
         private ScrollRect ScrollRectInstance => _scrollRect ??= transform.Find("Panel/Container/排序Table表格/ScrollRect滑動列表").GetComponent<ScrollRect>();
         [NonSerialized] private ScrollRect _scrollRect;
         

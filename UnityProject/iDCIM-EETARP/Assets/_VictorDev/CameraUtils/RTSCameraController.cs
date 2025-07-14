@@ -17,7 +17,7 @@ namespace VictorDev.CameraUtils
 
         [Header("Target Movement Bounds")] public float distance = 10f;
         public Vector2 distanceLimits = new Vector2(1f, 50f);
-        public float zoomSpeed = 0.5f;
+        public float zoomSpeed = 0.5f, zoomSpeedAdjust=0;
         public float zoomSpeedMultiplier = 7f;
         public float zoomDampTime = 0.2f;
 
@@ -170,7 +170,9 @@ namespace VictorDev.CameraUtils
 
             if (Mathf.Abs(scroll) > 0.01f)
             {
-                float adjustedZoomSpeed = zoomSpeed + (currentDistance * zoomSpeedMultiplier);
+                float zoomSpeedFinal = Mathf.Max(zoomSpeed + zoomSpeedAdjust, 0.0000001f);
+                Debug.Log($"zoomSpeedFinal: {zoomSpeedFinal}");
+                float adjustedZoomSpeed = zoomSpeedFinal + (currentDistance * zoomSpeedMultiplier);
                 distance -= scroll * adjustedZoomSpeed * Time.deltaTime;
                 distance = Mathf.Clamp(distance, distanceLimits.x, distanceLimits.y);
             }
@@ -235,6 +237,8 @@ namespace VictorDev.CameraUtils
                 distance = Mathf.Clamp(setDistance, distanceLimits.x, distanceLimits.y);
             }
         }
+        /// 設定Zoom的調整速度
+        public void SetZoomSpeedAdjust(float adjustValue) => zoomSpeedAdjust = adjustValue * zoomSpeed;
 
         public void FlyToPosition(GameObject target)
         {

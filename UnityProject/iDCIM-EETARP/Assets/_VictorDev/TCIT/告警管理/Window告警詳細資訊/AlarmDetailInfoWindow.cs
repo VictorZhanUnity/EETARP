@@ -27,7 +27,7 @@ namespace VictorDev.TCIT.AlarmModule
             AlarmType.isOn = _alarmListItem.alarmData.alarmType == AlarmData.AlarmType.Critical;
             TxtAlarmSystem.SetText(_alarmListItem.alarmData.alarmSystem.ToString());
             TxtOrigin.SetText(_alarmListItem.alarmData.OriginDeviceName);
-            TxtTime.SetText(_alarmListItem.alarmData.alarmTime.ToString("hh:mm:ss tt yyyy/MM/dd"));
+            TxtTime.SetText(_alarmListItem.alarmData.alarmTime.ToString("hh:mm:ss tt yyyy/MM/dd", System.Globalization.CultureInfo.CreateSpecificCulture("en-US")));
             TxtStatus.SetText(_alarmListItem.alarmData.status.ToString());
             InputNote.text = _alarmListItem.alarmData.note;
         }

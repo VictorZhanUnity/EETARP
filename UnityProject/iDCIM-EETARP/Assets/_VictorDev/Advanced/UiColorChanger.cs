@@ -8,7 +8,7 @@ namespace VictorDev.Advanced
 {
     public class UiColorChanger : MonoBehaviour
     {
-        [Foldout("[設定]")] [SerializeField] private List<Color> colors;
+        [Label("[Color設定]")] [SerializeField] private List<Color> colors;
         [Foldout("[設定]")] [Header("[可選] - Toggle的IsOn判斷")][SerializeField] private Toggle toggleTarget;
         [Foldout("[目標對像：Text]")] [SerializeField] private List<TextMeshProUGUI> textTargets;
         [Foldout("[目標對像：Image]")] [SerializeField] private List<Image> imageTargets;

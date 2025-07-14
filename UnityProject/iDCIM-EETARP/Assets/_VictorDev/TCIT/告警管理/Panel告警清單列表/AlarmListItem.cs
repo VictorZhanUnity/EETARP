@@ -24,7 +24,7 @@ namespace VictorDev.TCIT.AlarmModule
         {
             ToggleAlarmType.isOn = alarmData.alarmType == AlarmData.AlarmType.Critical;
             TxtSystem.SetText(alarmData.alarmSystem.ToString());
-            TxtTime.SetText(alarmData.alarmTime.ToString("hh:mm:SS tt", System.Globalization.CultureInfo.CreateSpecificCulture("en-US")));
+            TxtTime.SetText(alarmData.alarmTime.ToString("hh:mm:ss tt", System.Globalization.CultureInfo.CreateSpecificCulture("en-US")));
         }
 
         #region Initialized

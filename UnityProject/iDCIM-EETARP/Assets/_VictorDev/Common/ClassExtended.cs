@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace VictorDev.Common
 {
@@ -14,5 +15,8 @@ namespace VictorDev.Common
 
         /// [Extended] - List是否為Null或Empty
         public static bool IsNullOrEmpty<T>(this List<T> list) => list == null || list.Count == 0;
+        
+        /// [Extended] - 複製一份List
+        public static List<T> Copy<T>(this List<T> list) => list.Select(x=>x).ToList();
     }
 }

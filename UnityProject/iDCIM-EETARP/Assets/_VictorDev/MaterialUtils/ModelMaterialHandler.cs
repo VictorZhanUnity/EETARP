@@ -165,6 +165,22 @@ namespace VictorDev.MaterialUtils
             }
         }
 
+        public void RestoreOriginalMaterialOfTarget(GameObject target)
+        {
+            if (originalMaterials.ContainsKey(target.transform))
+            {
+                if (target.TryGetComponent(out Renderer renderer))
+                {
+                    renderer.materials = originalMaterials[target.transform];
+                    //開啟Collider
+                    if (target.TryGetComponent(out Collider collider))
+                    {
+                        collider.enabled = true;
+                    }
+                }
+            }
+        }
+        
 
         [ContextMenu("- 恢復原始材質")]
         ///  恢復原始材質

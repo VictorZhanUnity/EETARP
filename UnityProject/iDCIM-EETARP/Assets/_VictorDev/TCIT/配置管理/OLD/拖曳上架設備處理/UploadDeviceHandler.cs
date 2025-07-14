@@ -1,19 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using _VictorDEV.Revit;
 using DG.Tweening;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using VictorDev.Common;
 using VictorDev.Revit;
 using VictorDev.TCIT.StorageAssetUtils;
-using Debug = UnityEngine.Debug;
 
 public class UploadDeviceHandler : MonoBehaviour, IRevitModelDataExtended
 {
-    [Header("[Event] - 點擊機櫃U層時進行上架Event {庫存設備，目標機櫃，佔用U層數}")]
+    [Foldout("[Event] - 點擊機櫃U層時放置設備")]
+    public UnityEvent<GameObject> onSetDeviceAsset = new();
+    
+    [Foldout("[Event] - 點擊機櫃U層時進行上架Event {庫存設備，目標機櫃，佔用U層數}")]
     public UnityEvent<DeviceModelDataExtended, RackModelDataExtended, List<int>> onUploadDevice = new();
 
     /// 接收目前所選擇的機櫃/設備 
@@ -87,6 +90,8 @@ public class UploadDeviceHandler : MonoBehaviour, IRevitModelDataExtended
             //點擊時上架設備Invoke事件
             onUploadDevice?.Invoke(_selectedStockDevice, _currentMouseOverRackSpacer.RackData
                 , CurrentOccupyRackSpaceDisplayers.Select(displayer => displayer.ULevel).ToList());
+            
+            onSetDeviceAsset?.Invoke(_dragUploadDevice.gameObject);
         }
     }
 
@@ -107,7 +112,8 @@ public class UploadDeviceHandler : MonoBehaviour, IRevitModelDataExtended
 
 
             // 有MouseOver在RackSpacer上
-            if (hit.transform.TryGetComponent(out RackUnitDisplay targetRackSpacer))
+            if (hit.transform.TryGetComponent(out RackUnitDisplay targetRackSpacer)
+                && EventSystem.current.IsPointerOverGameObject() == false)
             {
                 //若RackeDisplayer與之前的不一樣時
                 if (_currentMouseOverRackSpacer != null && _currentMouseOverRackSpacer != targetRackSpacer)
