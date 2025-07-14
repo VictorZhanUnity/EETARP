@@ -17,7 +17,6 @@ namespace VictorDev.Advanced
             onEnableEvent?.Invoke();
             onEnableDisabledEvent?.Invoke(true);
             onEnableDisabledReverseEvent?.Invoke(false);
-            Debug.Log("onEnableEvent");
         }
         private void OnDisable()
         {

@@ -10,6 +10,7 @@ using UnityEngine.InputSystem;
 using VictorDev.Common;
 using VictorDev.Revit;
 using VictorDev.TCIT.StorageAssetUtils;
+using Debug = VictorDev.Common.Debug;
 
 public class UploadDeviceHandler : MonoBehaviour, IRevitModelDataExtended
 {
@@ -37,6 +38,8 @@ public class UploadDeviceHandler : MonoBehaviour, IRevitModelDataExtended
     {
         _dragUploadDevice = Instantiate(_selectedStockDevice.Model, transform);
         _dragUploadDevice.gameObject.SetActive(false);
+
+        _selectedStockDevice.Model = _dragUploadDevice;
         
         LayerMaskHelper.SetGameObjectLayerToLayerMask(_dragUploadDevice.gameObject, uploadDeviceLayerMask);
 
@@ -48,7 +51,7 @@ public class UploadDeviceHandler : MonoBehaviour, IRevitModelDataExtended
     }
     
     /// 取消選擇上架設備
-    public void CancelUploadDevice()
+    public void CancelUploadDevice(bool isUploadSuccess = false)
     {
         CurrentOccupyRackSpaceDisplayers?.ForEach(rackDisplay => rackDisplay.IsPinULocationVisible = false);
 
@@ -58,7 +61,7 @@ public class UploadDeviceHandler : MonoBehaviour, IRevitModelDataExtended
 
         if (_dragUploadDevice != null)
         {
-            Destroy(_dragUploadDevice.gameObject);
+            if(isUploadSuccess == false) Destroy(_dragUploadDevice.gameObject);
             _dragUploadDevice = null;
         }
     }
@@ -69,8 +72,6 @@ public class UploadDeviceHandler : MonoBehaviour, IRevitModelDataExtended
 
         ClickToUploadDevice();
     }
-
-   
 
     /// 點擊在RackSpacer上時放置設備於RackSpacer內
     private void ClickToUploadDevice()
@@ -109,7 +110,6 @@ public class UploadDeviceHandler : MonoBehaviour, IRevitModelDataExtended
             Vector3 size = _dragUploadDevice.GetComponent<MeshFilter>().mesh.bounds.size;
             size.y = 0;
             Vector3 localPosition = hit.point - size * 0.5f;
-
 
             // 有MouseOver在RackSpacer上
             if (hit.transform.TryGetComponent(out RackUnitDisplay targetRackSpacer)
@@ -173,7 +173,7 @@ public class UploadDeviceHandler : MonoBehaviour, IRevitModelDataExtended
             Destroy(child.gameObject);
         }
         _dragUploadDevice = null;
-        CancelUploadDevice();
+        CancelUploadDevice(true);
     }
 
     #region Variables

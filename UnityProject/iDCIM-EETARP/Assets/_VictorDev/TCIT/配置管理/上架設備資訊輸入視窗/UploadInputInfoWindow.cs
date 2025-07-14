@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using NaughtyAttributes;
 using TMPro;
 using UnityEngine;
@@ -48,15 +49,21 @@ namespace VictorDev.TCIT.StorageAssetUtils
 
         private void OnUploadDeviceSuccess()
         {
-            List<RackUnitDisplay> needToRemove = _toRack.AvailableUDisplayer.Where(rackUnitFree=> _occupyRackUnits.Contains(rackUnitFree.ULevel)).ToList();
+            _uploadDevice.Model.gameObject.isStatic = false;
+            _uploadDevice.Model.SetParent(_toRack.Model, true);
             
+            Vector3 pos = _uploadDevice.Model.localPosition;
+            pos.z = 0;
+            _uploadDevice.Model.transform.DOLocalMoveZ(0, 1).SetDelay(1f).SetEase(Ease.OutQuad);
+            
+            List<RackUnitDisplay> needToRemove = _toRack.AvailableUDisplayer.Where(rackUnitFree=> _occupyRackUnits.Contains(rackUnitFree.ULevel)).ToList();
             needToRemove.ForEach(target=>
             {
-                Debug.Log($"RackUnitDisplay needToRemove: {target.ULevel}");
-
-                target.IsPinULocationVisible = false;
-                target.HideULevel();
+                ObjectHelper.DestoryObject(target.gameObject);
+                //target.IsPinULocationVisible = false;
+                //target.HideULevel();
             });
+            
             _toRack.AvailableUDisplayer = _toRack.AvailableUDisplayer.Except(needToRemove).ToList();
             onUploadSuccess?.Invoke(_uploadDevice);
             CancelUpload();
@@ -74,7 +81,6 @@ namespace VictorDev.TCIT.StorageAssetUtils
             _toRack = null;
             _occupyRackUnits = null;
         }
-        
         
         #region Variables
 

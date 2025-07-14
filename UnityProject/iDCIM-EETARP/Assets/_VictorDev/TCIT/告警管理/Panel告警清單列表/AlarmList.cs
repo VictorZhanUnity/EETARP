@@ -46,7 +46,6 @@ namespace VictorDev.TCIT.AlarmModule
         /// 點擊告警的模型時
         public void ClickModelAsset(GameObject target)
         {
-            Debug.Log($"ClickModelAsset");
             AlarmListItem item = _listItems.FirstOrDefault(item => item.alarmData.alarmTargetModel == target.transform);
             if (item != null)
             {

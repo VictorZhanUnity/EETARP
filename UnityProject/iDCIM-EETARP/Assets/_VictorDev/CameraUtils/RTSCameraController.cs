@@ -171,7 +171,6 @@ namespace VictorDev.CameraUtils
             if (Mathf.Abs(scroll) > 0.01f)
             {
                 float zoomSpeedFinal = Mathf.Max(zoomSpeed + zoomSpeedAdjust, 0.0000001f);
-                Debug.Log($"zoomSpeedFinal: {zoomSpeedFinal}");
                 float adjustedZoomSpeed = zoomSpeedFinal + (currentDistance * zoomSpeedMultiplier);
                 distance -= scroll * adjustedZoomSpeed * Time.deltaTime;
                 distance = Mathf.Clamp(distance, distanceLimits.x, distanceLimits.y);
