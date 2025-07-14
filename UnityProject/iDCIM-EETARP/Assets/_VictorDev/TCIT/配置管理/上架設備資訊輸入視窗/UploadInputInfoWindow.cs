@@ -20,12 +20,15 @@ namespace VictorDev.TCIT.StorageAssetUtils
         [Foldout("[Event] - 上架設備成功時Invoke")]
         public UnityEvent<DeviceModelDataExtended> onUploadSuccess;
 
-        public void ReceiveData(DeviceModelDataExtended device, RackModelDataExtended rack, List<int> rackUnits)
+        private Transform _tempDevice;
+        
+        public void ReceiveData(DeviceModelDataExtended device, RackModelDataExtended rack, List<int> rackUnits, Transform tempDevice)
         {
             _uploadDevice = device;
             _toRack = rack;
             _occupyRackUnits = rackUnits;
-
+            _tempDevice = tempDevice;
+            
             UpdateUI();
         }
 
@@ -49,12 +52,13 @@ namespace VictorDev.TCIT.StorageAssetUtils
 
         private void OnUploadDeviceSuccess()
         {
-            _uploadDevice.Model.gameObject.isStatic = false;
-            _uploadDevice.Model.SetParent(_toRack.Model, true);
+            //_uploadDevice.Model.gameObject.isStatic = false;
+            //_uploadDevice.Model.SetParent(_toRack.Model, true);
+            _tempDevice.SetParent(_toRack.Model, true);
             
-            Vector3 pos = _uploadDevice.Model.localPosition;
+            Vector3 pos = _tempDevice.localPosition;
             pos.z = 0;
-            _uploadDevice.Model.transform.DOLocalMoveZ(0, 1).SetDelay(1f).SetEase(Ease.OutQuad);
+            _tempDevice.transform.DOLocalMoveZ(0, 1).SetDelay(1f).SetEase(Ease.OutQuad);
             
             List<RackUnitDisplay> needToRemove = _toRack.AvailableUDisplayer.Where(rackUnitFree=> _occupyRackUnits.Contains(rackUnitFree.ULevel)).ToList();
             needToRemove.ForEach(target=>

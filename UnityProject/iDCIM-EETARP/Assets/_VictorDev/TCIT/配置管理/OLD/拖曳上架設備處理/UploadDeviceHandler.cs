@@ -18,7 +18,7 @@ public class UploadDeviceHandler : MonoBehaviour, IRevitModelDataExtended
     public UnityEvent<GameObject> onSetDeviceAsset = new();
     
     [Foldout("[Event] - 點擊機櫃U層時進行上架Event {庫存設備，目標機櫃，佔用U層數}")]
-    public UnityEvent<DeviceModelDataExtended, RackModelDataExtended, List<int>> onUploadDevice = new();
+    public UnityEvent<DeviceModelDataExtended, RackModelDataExtended, List<int>, Transform> onUploadDevice = new();
 
     /// 接收目前所選擇的機櫃/設備 
     public void ReceiveData(RevitModelDataExtended revitModelDataExtended)
@@ -39,7 +39,7 @@ public class UploadDeviceHandler : MonoBehaviour, IRevitModelDataExtended
         _dragUploadDevice = Instantiate(_selectedStockDevice.Model, transform);
         _dragUploadDevice.gameObject.SetActive(false);
 
-        _selectedStockDevice.Model = _dragUploadDevice;
+        //_selectedStockDevice.Model = _dragUploadDevice;
         
         LayerMaskHelper.SetGameObjectLayerToLayerMask(_dragUploadDevice.gameObject, uploadDeviceLayerMask);
 
@@ -90,7 +90,7 @@ public class UploadDeviceHandler : MonoBehaviour, IRevitModelDataExtended
 
             //點擊時上架設備Invoke事件
             onUploadDevice?.Invoke(_selectedStockDevice, _currentMouseOverRackSpacer.RackData
-                , CurrentOccupyRackSpaceDisplayers.Select(displayer => displayer.ULevel).ToList());
+                , CurrentOccupyRackSpaceDisplayers.Select(displayer => displayer.ULevel).ToList(), _dragUploadDevice);
             
             onSetDeviceAsset?.Invoke(_dragUploadDevice.gameObject);
         }
